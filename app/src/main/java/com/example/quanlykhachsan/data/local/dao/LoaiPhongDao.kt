@@ -1,0 +1,24 @@
+package com.example.quanlykhachsan.data.local.dao
+
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import com.example.quanlykhachsan.data.local.entity.LoaiPhong
+
+@Dao
+interface LoaiPhongDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(loaiPhong: LoaiPhong): Long
+
+    @Update
+    suspend fun update(loaiPhong: LoaiPhong)
+
+    @Delete
+    suspend fun delete(loaiPhong: LoaiPhong)
+
+    @Query("SELECT * FROM loai_phong ORDER BY tenLoaiPhong")
+    fun getAll(): LiveData<List<LoaiPhong>>
+
+    @Query("SELECT * FROM loai_phong WHERE maLoaiPhong = :id")
+    suspend fun getById(id: Int): LoaiPhong?
+}
