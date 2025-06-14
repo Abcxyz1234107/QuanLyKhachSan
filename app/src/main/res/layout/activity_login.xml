@@ -64,40 +64,44 @@
             android:paddingTop="40dp"
             android:paddingBottom="40dp">
 
-            <!-- Ô nhập tên -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilUsername"
-
+            <!-- Tiêu đề: Tên đăng nhập -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_username"
-                app:boxBackgroundMode="none">
+                android:text="Tên đăng nhập"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etUsername"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Ô nhập tên -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:background="@drawable/login_text_background"
+                android:padding="10dp" />
+
+            <!-- Tiêu đề: Mật khẩu -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mật khẩu"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="4dp" />
 
             <!-- Ô nhập mật khẩu -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilPassword"
-
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:hint="@string/hint_password"
-                app:boxBackgroundMode="none">
+                android:inputType="textPassword"
+                android:background="@drawable/login_text_background"
+                android:padding="10dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Button + badge emoji -->
+            <!-- Button đăng nhập -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
