@@ -20,4 +20,10 @@ interface NguoiDungPhanMemDao {
 
     @Query("SELECT * FROM nguoi_dung_phan_mem WHERE maNguoiDung = :id")
     suspend fun getById(id: Int): NguoiDungPhanMem?
+
+    @Query("SELECT COUNT(*) FROM nguoi_dung_phan_mem " +
+                "WHERE tenTaiKhoan = :username AND matKhau = :password"
+    )
+    suspend fun countUser(username: String, password: String): Int
+
 }

@@ -1,29 +1,48 @@
 package com.example.quanlykhachsan.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.quanlykhachsan.data.local.database.AppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class LoginActivityVM : ViewModel() {
+class LoginActivityVM(application: Application) : AndroidViewModel(application) {
 
-    /* LiveData mô tả trạng thái đăng nhập */
     private val _loginState = MutableLiveData<LoginState>()
     val loginState: LiveData<LoginState> = _loginState
 
-    /* Hàm xử lý đăng nhập – không dùng “early-return” theo sở thích của bạn  */
+    private val dao = AppDatabase.getDatabase(application).nguoiDungPhanMemDao()
+
     fun login(username: String, password: String) {
-        var result: LoginState = LoginState.Success          // giả định thành công trước
-        if (username.isBlank()) {
-            result = LoginState.Error("Vui lòng nhập tên đăng nhập")
-        } else if (password.isBlank()) {
-            result = LoginState.Error("Vui lòng nhập mật khẩu")
-        } else if (!(username == "admin" && password == "123456")) {
-            result = LoginState.Error("Sai tài khoản hoặc mật khẩu")
+
+        if (username.isBlank() && password.isBlank()) {
+            _loginState.value = LoginState.Error("Bạn chưa nhập tên đăng nhập và mật khẩu")
+            return
         }
-        _loginState.value = result
+
+        if (username.isBlank()) {
+            _loginState.value = LoginState.Error("Vui lòng nhập tên đăng nhập")
+            return
+        }
+        if (password.isBlank()) {
+            _loginState.value = LoginState.Error("Vui lòng nhập mật khẩu")
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val match = dao.countUser(username, password) > 0
+            val state: LoginState = if (match)
+                LoginState.Success
+            else
+                LoginState.Error("Sai tài khoản hoặc mật khẩu")
+
+            _loginState.postValue(state)
+        }
     }
 
-    /* Định nghĩa các trạng thái UI */
     sealed class LoginState {
         object Success : LoginState()
         data class Error(val message: String) : LoginState()
