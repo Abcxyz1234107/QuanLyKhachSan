@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QuanLyKhachSan</string>
+    <string name="login_title">Xin chào, hãy đăng nhập và quản lý khách sạn của bạn</string>
+    <string name="hint_username">Tên đăng nhập</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="action_login">Đăng Nhập !</string>
+    <string name="top_bar_title">Đăng nhập và quản lý khách sạn của bạn</string>
+
 </resources>

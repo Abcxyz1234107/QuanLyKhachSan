@@ -41,7 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "quan_ly_khach_san_db"
                 )
-                    .fallbackToDestructiveMigration()
+
                     .build()
                     .also { INSTANCE = it }
             }

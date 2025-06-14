@@ -16,7 +16,9 @@
     <color name="error">#B00020</color>
     <color name="on_error">#FFFFFF</color>
 
-    <!-- tuỳ chọn -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="teal_700">#008080</color>
+    <color name="teal_400">#4DB6AC</color>
 </resources>
