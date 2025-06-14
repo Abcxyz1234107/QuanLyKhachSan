@@ -2,18 +2,92 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <!-- TOP BAR -->
+
+    <!-- SIDE NAVIGATION (teal_900) -->
+    <!-- Đổi kích thước các icon ở styles.xml -->
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="348dp"
+        android:layout_height="56dp"
+
+        android:background="@color/teal_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/sideNav"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/top_bar_menu"
+        app:title=""
+        app:titleTextColor="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/sideNav"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:background="@color/teal_900"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Manage -->
+
+        <!-- ALL ROOM -->
+        <ImageButton
+            android:id="@+id/itemMenu"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_dashboard_manage" />
+
+        <ImageButton
+            android:id="@+id/itemDashboard"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_allroom" />
+
+        <!-- THỐNG KÊ -->
+        <ImageButton
+            android:id="@+id/itemStatistic"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_bar_chart" />
+
+        <!-- TRẢ PHÒNG -->
+        <ImageButton
+            android:id="@+id/itemCheckout"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_payment" />
+
+        <!-- ĐẶT PHÒNG -->
+        <ImageButton
+            android:id="@+id/itemBook"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_book_room" />
+
+        <!-- QUẢN LÝ PHÒNG -->
+        <ImageButton
+            android:id="@+id/itemRoom"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_manage_room" />
+
+        <!-- NHÂN VIÊN -->
+        <ImageButton
+            android:id="@+id/itemStaff"
+            style="@style/SideNavIcon"
+            android:src="@drawable/ic_staffs" />
+    </LinearLayout>
+
+    <!-- MAIN CONTENT HOST -->
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/sideNav"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

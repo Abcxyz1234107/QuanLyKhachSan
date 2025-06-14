@@ -6,4 +6,10 @@
     <string name="action_login">Đăng Nhập !</string>
     <string name="top_bar_title">Đăng nhập và quản lý khách sạn của bạn</string>
 
+    <string name="nav_dashboard">Tổng quan</string>
+    <string name="nav_statistic">Thống kê</string>
+    <string name="nav_book">Đặt phòng</string>
+    <string name="nav_checkout">Trả phòng</string>
+    <string name="nav_room">Phòng</string>
+    <string name="nav_staff">Nhân viên</string>
 </resources>

@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.quanlykhachsan.databinding.ActivityLoginBinding
-import com.example.quanlykhachsan.MainActivity        // màn hình tiếp theo
+import com.example.quanlykhachsan.MainActivity
 import com.example.quanlykhachsan.viewmodel.LoginActivityVM
 import com.google.android.material.snackbar.Snackbar
 import android.graphics.Rect
@@ -24,14 +24,12 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /* Xử lý nút Đăng nhập – gom toàn bộ logic UI ở Activity */
         binding.btnLogin.setOnClickListener {
             val username = binding.etUsername.text?.toString().orEmpty().trim()
             val password = binding.etPassword.text?.toString().orEmpty().trim()
             viewModel.login(username, password)
         }
 
-        /* Quan sát kết quả đăng nhập */
         viewModel.loginState.observe(this, Observer { state ->
             when (state) {
                 is LoginActivityVM.LoginState.Success -> {
