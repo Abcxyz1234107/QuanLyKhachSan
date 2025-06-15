@@ -5,14 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- TOP BAR -->
-
-    <!-- SIDE NAVIGATION (teal_900) -->
     <!-- Đổi kích thước các icon ở styles.xml -->
-
+    <!-- TOP BAR -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
-        android:layout_width="348dp"
+        android:layout_width="0dp"
         android:layout_height="56dp"
 
         android:background="@color/teal_500"
@@ -24,9 +21,10 @@
         app:title=""
         app:titleTextColor="@android:color/white" />
 
+    <!-- SIDE NAVIGATION (teal_900) -->
     <LinearLayout
         android:id="@+id/sideNav"
-        android:layout_width="64dp"
+        android:layout_width="@dimen/side_nav_collapsed"
         android:layout_height="0dp"
         android:background="@color/teal_900"
         android:orientation="vertical"
@@ -34,48 +32,146 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Manage -->
-
-        <!-- ALL ROOM -->
+        <!-- Open / Close -->
         <ImageButton
             android:id="@+id/itemMenu"
             style="@style/SideNavIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_dashboard_manage" />
 
-        <ImageButton
-            android:id="@+id/itemDashboard"
-            style="@style/SideNavIcon"
-            android:src="@drawable/ic_allroom" />
+        <!-- Trang Chủ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <!-- THỐNG KÊ -->
-        <ImageButton
-            android:id="@+id/itemStatistic"
-            style="@style/SideNavIcon"
-            android:src="@drawable/ic_bar_chart" />
+            <ImageButton
+                android:id="@+id/itemDashboard"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_allroom" />
 
-        <!-- TRẢ PHÒNG -->
-        <ImageButton
-            android:id="@+id/itemCheckout"
-            style="@style/SideNavIcon"
-            android:src="@drawable/ic_payment" />
+            <Button
+                android:id="@+id/btnDashboard"
+                style="@style/SideNavLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_home"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <!-- Báo Cáo -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/itemStatistic"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_bar_chart" />
+
+            <Button
+                style="@style/SideNavLabel"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_stat" />
+        </LinearLayout>
+
+        <!-- Trả Phòng -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/itemCheckout"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_payment"/>
+            <Button
+                style="@style/SideNavLabel"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_checkout"/>
+        </LinearLayout>
 
         <!-- ĐẶT PHÒNG -->
-        <ImageButton
-            android:id="@+id/itemBook"
-            style="@style/SideNavIcon"
-            android:src="@drawable/ic_book_room" />
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/itemBook"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_book_room"/>
+            <Button
+                style="@style/SideNavLabel"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_book"/>
+        </LinearLayout>
 
         <!-- QUẢN LÝ PHÒNG -->
-        <ImageButton
-            android:id="@+id/itemRoom"
-            style="@style/SideNavIcon"
-            android:src="@drawable/ic_manage_room" />
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/itemRoom"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_manage_room"/>
+            <Button
+                style="@style/SideNavLabel"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_room"/>
+        </LinearLayout>
+
+
+        <!-- QUẢN LÝ LOẠI PHÒNG -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/itemRoomType"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_manage_room_type"/>
+            <Button
+                style="@style/SideNavLabel"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_room_type"/>
+        </LinearLayout>
+
 
         <!-- NHÂN VIÊN -->
-        <ImageButton
-            android:id="@+id/itemStaff"
-            style="@style/SideNavIcon"
-            android:src="@drawable/ic_staffs" />
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/itemStaff"
+                style="@style/SideNavIcon"
+                android:layout_width="75dp"
+                android:src="@drawable/ic_staffs"/>
+            <Button
+                style="@style/SideNavLabel"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nav_staff"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- MAIN CONTENT HOST -->

@@ -9,10 +9,13 @@ import androidx.core.view.children
 import com.example.quanlykhachsan.viewmodel.MainViewModel
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.View
+import androidx.core.view.updateLayoutParams
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private var isSideNavExpanded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +24,24 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.topBar))
         supportActionBar?.setDisplayShowTitleEnabled(false) // Ẩn tiêu đề “QuanLyKhachSan”
 
-        findViewById<LinearLayout>(R.id.sideNav).children // Gắn sự kiện cho từng icon
-            .filterIsInstance<ImageButton>()
-            .forEach { btn ->
-                btn.setOnClickListener { onNavItemSelected(btn.id) }
-            }
+        val sideNav   = findViewById<LinearLayout>(R.id.sideNav)
+        val btnMenu = findViewById<ImageButton>(R.id.itemMenu)
+
+        /* Gán click riêng cho nút menu manage */
+        btnMenu.setOnClickListener { toggleSideNav(sideNav, btnMenu) }
+
+        /* Gắn click cho các icon điều hướng còn lại */
+        listOf(
+            R.id.itemDashboard,
+            R.id.itemStatistic,
+            R.id.itemBook,
+            R.id.itemCheckout,
+            R.id.itemRoom,
+            R.id.itemRoomType,
+            R.id.itemStaff
+        ).forEach { id ->
+            findViewById<ImageButton>(id).setOnClickListener { onNavItemSelected(id) }
+        }
 
         if (savedInstanceState == null) {
             onNavItemSelected(R.id.itemDashboard)
@@ -46,5 +62,19 @@ class MainActivity : AppCompatActivity() {
             R.id.itemRoom      -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
             R.id.itemStaff     -> viewModel.openStaffManager(supportFragmentManager, R.id.container)*/
         }
+    }
+    private fun toggleSideNav(side: LinearLayout, menuBtn: ImageButton) {
+        if (isSideNavExpanded) {
+            side.updateLayoutParams {
+                width = resources.getDimensionPixelSize(R.dimen.side_nav_collapsed)
+            }
+            menuBtn.setImageResource(R.drawable.ic_dashboard_manage)
+        } else {
+            side.updateLayoutParams {
+                width = resources.getDimensionPixelSize(R.dimen.side_nav_expanded)
+            }
+            menuBtn.setImageResource(R.drawable.ic_arrow_back)
+        }
+        isSideNavExpanded = !isSideNavExpanded
     }
 }
