@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.core.view.updateLayoutParams
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,22 +31,43 @@ class MainActivity : AppCompatActivity() {
         /* Gán click riêng cho nút menu manage */
         btnMenu.setOnClickListener { toggleSideNav(sideNav, btnMenu) }
 
+
         /* Gắn click cho các icon điều hướng còn lại */
-        listOf(
-            R.id.itemDashboard,
-            R.id.itemStatistic,
-            R.id.itemBook,
-            R.id.itemCheckout,
-            R.id.itemRoom,
-            R.id.itemRoomType,
-            R.id.itemStaff
-        ).forEach { id ->
-            findViewById<ImageButton>(id).setOnClickListener { onNavItemSelected(id) }
+        val navBtnIds = listOf(
+            R.id.navDashboard,  R.id.navStatistic,
+            R.id.navBook,       R.id.navCheckout,
+            R.id.navRoom,       R.id.navRoomType,
+            R.id.navStaff
+        )
+
+        var currentSelected: View? = null
+        navBtnIds.forEach { id ->
+            findViewById<MaterialButton>(id)?.apply {
+                isCheckable = true
+                setOnClickListener {
+                    if (currentSelected == this) {
+                        isSelected = false
+                        isChecked = false
+                        currentSelected = null
+                    } else {
+                        currentSelected?.apply {
+                            isSelected = false
+                            isChecked = false
+                        }
+                        isSelected = true
+                        isChecked = true
+                        currentSelected = this
+                        onNavItemSelected(id)
+                    }
+                }
+            }
         }
 
+
         if (savedInstanceState == null) {
-            onNavItemSelected(R.id.itemDashboard)
+            onNavItemSelected(R.id.itemMenu)
         }
+        findViewById<MaterialButton>(R.id.navDashboard)?.performClick()
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -53,15 +75,16 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun onNavItemSelected(viewId: Int) { // Điều hướng theo id nút
-        when (viewId) {
-            /*R.id.itemDashboard -> viewModel.openDashboard(supportFragmentManager, R.id.container)
-            R.id.itemStatistic -> viewModel.openStatistic(supportFragmentManager, R.id.container)
-            R.id.itemBook      -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
-            R.id.itemCheckout  -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
-            R.id.itemRoom      -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
-            R.id.itemStaff     -> viewModel.openStaffManager(supportFragmentManager, R.id.container)*/
-        }
+    private fun onNavItemSelected(viewId: Int) {
+        /*when (viewId) {
+            R.id.navDashboard        -> viewModel.openDashboard(supportFragmentManager, R.id.container)
+            R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
+            R.id.navBook             -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
+            R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
+            R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
+            R.id.navRoomType         -> viewModel.openRoomTypeManager(supportFragmentManager, R.id.container)
+            R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)
+        }*/
     }
     private fun toggleSideNav(side: LinearLayout, menuBtn: ImageButton) {
         if (isSideNavExpanded) {
