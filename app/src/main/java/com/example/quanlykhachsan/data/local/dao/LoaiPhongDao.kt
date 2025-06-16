@@ -21,4 +21,11 @@ interface LoaiPhongDao {
 
     @Query("SELECT * FROM loai_phong WHERE maLoaiPhong = :id")
     suspend fun getById(id: Int): LoaiPhong?
+
+    @Query("SELECT * FROM loai_phong ORDER BY maLoaiPhong")
+    suspend fun getAllSync(): List<LoaiPhong>
+
+    @Query("SELECT COUNT(DISTINCT maLoaiPhong) FROM loai_phong")
+    suspend fun countDistinct(): Int
+
 }

@@ -24,4 +24,7 @@ interface PhongDao {
 
     @Query("SELECT * FROM phong WHERE trangThaiPhong = :status")
     fun getByTrangThai(status: String): LiveData<List<Phong>>
+
+    @Query("SELECT * FROM phong ORDER BY maPhong")
+    suspend fun getAllSync(): List<Phong>
 }

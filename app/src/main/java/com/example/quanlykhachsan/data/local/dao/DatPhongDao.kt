@@ -24,4 +24,7 @@ interface DatPhongDao {
 
     @Query("SELECT * FROM dat_phong WHERE maPhong = :roomId")
     fun getByPhong(roomId: Int): LiveData<List<DatPhong>>
+
+    @Query("SELECT * FROM dat_phong WHERE maPhong = :roomId")
+    suspend fun getByPhongSync(roomId: Int): List<DatPhong>
 }
