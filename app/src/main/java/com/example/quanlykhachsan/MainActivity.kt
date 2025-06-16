@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                         isSelected = false
                         isChecked = false
                         currentSelected = null
+                        viewModel.openDashboard(supportFragmentManager, R.id.container)
                     } else {
                         currentSelected?.apply {
                             isSelected = false
@@ -80,11 +81,11 @@ class MainActivity : AppCompatActivity() {
     private fun onNavItemSelected(viewId: Int) {
         when (viewId) {
             R.id.navDashboard        -> viewModel.openDashboard(supportFragmentManager, R.id.container)
-/*            R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
+            R.id.navRoomType         -> viewModel.openRoomTypeManager(supportFragmentManager, R.id.container)
+            //R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
+/*          R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
             R.id.navBook             -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
             R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
-            R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
-            R.id.navRoomType         -> viewModel.openRoomTypeManager(supportFragmentManager, R.id.container)
             R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)*/
         }
     }

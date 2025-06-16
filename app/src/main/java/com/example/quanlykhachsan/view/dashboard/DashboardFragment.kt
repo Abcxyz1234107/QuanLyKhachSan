@@ -11,7 +11,7 @@ import com.example.quanlykhachsan.viewmodel.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DashboardActivity : Fragment(R.layout.activity_dashboard) {
+class DashboardFragment : Fragment(R.layout.activity_dashboard) {
 
     private var _binding: ActivityDashboardBinding? = null
     private val binding get() = _binding!!

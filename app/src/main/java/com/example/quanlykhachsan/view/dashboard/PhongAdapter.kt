@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quanlykhachsan.databinding.ItemPhongBinding
+import com.example.quanlykhachsan.databinding.ItemRoomBinding
 import com.example.quanlykhachsan.viewmodel.PhongUI
 
 class PhongAdapter :
@@ -14,10 +14,10 @@ class PhongAdapter :
         override fun areContentsTheSame(o: PhongUI, n: PhongUI) = o == n
     }) {
 
-    inner class VH(val binding: ItemPhongBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class VH(val binding: ItemRoomBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
-        VH(ItemPhongBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        VH(ItemRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         getItem(position).let { ui ->
