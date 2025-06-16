@@ -46,6 +46,21 @@
         <item name="android:layout_height">75dp</item>
     </style>
 
+    <style name="Widget_App_PrimaryButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@null</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/bg_primary_button</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="elevation">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <style name="Widget_App_BorderedContainer">
+        <item name="android:background">@drawable/bg_border_sides_bottom</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
     <dimen name="side_nav_collapsed">64dp</dimen>
     <dimen name="side_nav_expanded">210dp</dimen>
 

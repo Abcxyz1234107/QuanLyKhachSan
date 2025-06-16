@@ -13,5 +13,6 @@
     <string name="nav_room">Quản Lý Phòng</string>
     <string name="nav_room_type">Quản Lý Loại Phòng</string>
     <string name="nav_staff">Quản Lý Nhân Viên</string>
+    <string name="tenloaiphong">Tên loại phòng</string>
 
 </resources>
