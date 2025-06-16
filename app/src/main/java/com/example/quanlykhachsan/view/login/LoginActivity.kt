@@ -1,4 +1,4 @@
-package com.example.quanlykhachsan.ui.login
+package com.example.quanlykhachsan.view.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.quanlykhachsan.databinding.ActivityLoginBinding
 import com.example.quanlykhachsan.MainActivity
-import com.example.quanlykhachsan.viewmodel.LoginActivityVM
+import com.example.quanlykhachsan.viewmodel.LoginActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import android.graphics.Rect
 import android.view.MotionEvent
@@ -17,7 +17,7 @@ import android.widget.EditText
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private val viewModel: LoginActivityVM by viewModels()
+    private val viewModel: LoginActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +32,11 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.loginState.observe(this, Observer { state ->
             when (state) {
-                is LoginActivityVM.LoginState.Success -> {
+                is LoginActivityViewModel.LoginState.Success -> {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()  // không quay lại màn hình Login
                 }
-                is LoginActivityVM.LoginState.Error -> {
+                is LoginActivityViewModel.LoginState.Error -> {
                     Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
                 }
             }

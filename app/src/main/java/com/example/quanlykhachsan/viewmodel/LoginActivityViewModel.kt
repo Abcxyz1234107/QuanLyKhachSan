@@ -9,7 +9,7 @@ import com.example.quanlykhachsan.data.local.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginActivityVM(application: Application) : AndroidViewModel(application) {
+class LoginActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _loginState = MutableLiveData<LoginState>()
     val loginState: LiveData<LoginState> = _loginState

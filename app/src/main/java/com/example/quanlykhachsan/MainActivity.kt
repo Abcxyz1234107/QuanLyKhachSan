@@ -12,7 +12,9 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.button.MaterialButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
@@ -76,15 +78,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNavItemSelected(viewId: Int) {
-        /*when (viewId) {
+        when (viewId) {
             R.id.navDashboard        -> viewModel.openDashboard(supportFragmentManager, R.id.container)
-            R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
+/*            R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
             R.id.navBook             -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
             R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
             R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
             R.id.navRoomType         -> viewModel.openRoomTypeManager(supportFragmentManager, R.id.container)
-            R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)
-        }*/
+            R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)*/
+        }
     }
     private fun toggleSideNav(side: LinearLayout, menuBtn: ImageButton) {
         if (isSideNavExpanded) {
