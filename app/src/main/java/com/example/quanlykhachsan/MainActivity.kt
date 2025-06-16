@@ -10,7 +10,11 @@ import com.example.quanlykhachsan.viewmodel.MainViewModel
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,20 +22,48 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
-    private var isSideNavExpanded = false
+    private var isDropDownVisible = false
+    private lateinit var drawer: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(findViewById(R.id.topBar))
+
         supportActionBar?.setDisplayShowTitleEnabled(false) // Ẩn tiêu đề “QuanLyKhachSan”
 
-        val sideNav   = findViewById<LinearLayout>(R.id.sideNav)
-        val btnMenu = findViewById<ImageButton>(R.id.itemMenu)
+        val toolbar = findViewById<MaterialToolbar>(R.id.topBar)
+        setSupportActionBar(toolbar)
 
-        /* Gán click riêng cho nút menu manage */
-        btnMenu.setOnClickListener { toggleSideNav(sideNav, btnMenu) }
+        val dropDownNav = findViewById<LinearLayout>(R.id.dropDownNav)
+        // 1) Toggle drop-down
+        toolbar.setNavigationOnClickListener {
+            if (isDropDownVisible) {
+                dropDownNav.visibility = View.GONE
+                toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_arrow_drop_down)
+            } else {
+                dropDownNav.visibility = View.VISIBLE
+                toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_arrow_drop_up)
+            }
+            isDropDownVisible = !isDropDownVisible
+        }
+
+        // 2) Gắn listener cho các button trong dropDownNav
+        listOf(
+            R.id.navDashboard, R.id.navStatistic,
+            R.id.navBook, R.id.navCheckout,
+            R.id.navRoom, R.id.navRoomType,
+            R.id.navStaff
+        ).forEach { id ->
+            findViewById<MaterialButton>(id)?.setOnClickListener {
+                onNavItemSelected(id)
+                // ẩn drop-down sau khi chọn
+                dropDownNav.visibility = View.GONE
+                toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_arrow_drop_down)
+                isDropDownVisible = false
+            }
+        }
 
 
         /* Gắn click cho các icon điều hướng còn lại */
@@ -68,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
 
         if (savedInstanceState == null) {
-            onNavItemSelected(R.id.itemMenu)
+            onNavItemSelected(R.id.navDashboard)
         }
         findViewById<MaterialButton>(R.id.navDashboard)?.performClick()
     }
@@ -88,19 +120,5 @@ class MainActivity : AppCompatActivity() {
             R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
             R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)*/
         }
-    }
-    private fun toggleSideNav(side: LinearLayout, menuBtn: ImageButton) {
-        if (isSideNavExpanded) {
-            side.updateLayoutParams {
-                width = resources.getDimensionPixelSize(R.dimen.side_nav_collapsed)
-            }
-            menuBtn.setImageResource(R.drawable.ic_dashboard_manage)
-        } else {
-            side.updateLayoutParams {
-                width = resources.getDimensionPixelSize(R.dimen.side_nav_expanded)
-            }
-            menuBtn.setImageResource(R.drawable.ic_arrow_back)
-        }
-        isSideNavExpanded = !isSideNavExpanded
     }
 }

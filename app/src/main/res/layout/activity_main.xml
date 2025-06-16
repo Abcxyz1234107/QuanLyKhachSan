@@ -1,176 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Đổi kích thước các icon ở styles.xml -->
     <!-- TOP BAR -->
-
-    <!-- SIDE NAVIGATION (teal_900) -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
         android:layout_width="0dp"
         android:layout_height="56dp"
-
         android:background="@color/teal_500"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/top_bar_menu"
+        app:navigationIcon="@drawable/ic_arrow_drop_down"
         app:title=""
-        app:titleTextColor="@android:color/white" />
+        app:titleTextColor="@android:color/white"
+        app:menu="@menu/top_bar_menu" />
 
+    <!-- DROP-DOWN NAVIGATION (ẩn sẵn) -->
     <LinearLayout
-        android:id="@+id/sideNav"
-        android:layout_width="@dimen/side_nav_collapsed"
-        android:layout_height="0dp"
+        android:id="@+id/dropDownNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
         android:background="@color/teal_900"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topBar">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Open / Close -->
-        <ImageButton
-            android:id="@+id/itemMenu"
-            style="@style/SideNavIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_arrow_open" />
+        <!-- Mỗi nút chia đều bằng weight=1 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navDashboard"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_home"
+            app:icon="@drawable/ic_allroom"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
 
-        <!-- Trang Chủ -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navStatistic"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_stat"
+            app:icon="@drawable/ic_bar_chart"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navDashboard"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_home"
-                app:icon="@drawable/ic_allroom"
-                app:iconTint="@android:color/white"/>
-        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navBook"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_book"
+            app:icon="@drawable/ic_book_room"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
 
-        <!-- Báo Cáo -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navCheckout"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_checkout"
+            app:icon="@drawable/ic_payment"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navStatistic"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_stat"
-                app:icon="@drawable/ic_bar_chart"
-                app:iconTint="@android:color/white"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navRoom"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_room"
+            app:icon="@drawable/ic_manage_room"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
 
-        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navRoomType"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_room_type"
+            app:icon="@drawable/ic_manage_room_type"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
 
-        <!-- Trả Phòng -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navCheckout"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_checkout"
-                app:icon="@drawable/ic_payment"
-                app:iconTint="@android:color/white"/>
-
-        </LinearLayout>
-
-        <!-- ĐẶT PHÒNG -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navBook"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_book"
-                app:icon="@drawable/ic_book_room"
-                app:iconTint="@android:color/white"/>
-
-        </LinearLayout>
-
-        <!-- QUẢN LÝ PHÒNG -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navRoom"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_room"
-                app:icon="@drawable/ic_manage_room"
-                app:iconTint="@android:color/white"/>
-
-        </LinearLayout>
-
-
-        <!-- QUẢN LÝ LOẠI PHÒNG -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navRoomType"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_room_type"
-                app:icon="@drawable/ic_manage_room_type"
-                app:iconTint="@android:color/white"/>
-
-        </LinearLayout>
-
-
-        <!-- NHÂN VIÊN -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/navStaff"
-                style="@style/SideNavItem"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:checkable="true"
-                android:text="@string/nav_staff"
-                app:icon="@drawable/ic_staffs"
-                app:iconTint="@android:color/white"/>
-
-        </LinearLayout>
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navStaff"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_staff"
+            app:icon="@drawable/ic_staffs"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
     </LinearLayout>
 
     <!-- MAIN CONTENT HOST -->
@@ -178,11 +122,9 @@
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dropDownNav"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/sideNav"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
