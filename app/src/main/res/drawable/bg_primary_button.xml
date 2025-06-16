@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- trạng thái ấn -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/teal_600"/>
+            <corners android:radius="6dp"/>
+            <alpha android:alpha="0.80"/>
+        </shape>
+    </item>
+
+    <!-- trạng thái bình thường -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/teal_600"/>
+            <corners android:radius="6dp"/>
+        </shape>
+    </item>
+</selector>
