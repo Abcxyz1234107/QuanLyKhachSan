@@ -32,10 +32,14 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.topBar))
 
         val toolbar = findViewById<MaterialToolbar>(R.id.topBar)
-        setSupportActionBar(toolbar)
-
         val dropDownNav = findViewById<LinearLayout>(R.id.dropDownNav)
-        // 1) Toggle drop-down
+
+        setSupportActionBar(toolbar)
+        isDropDownVisible = true
+        dropDownNav.visibility = View.VISIBLE
+        toolbar.navigationIcon =
+            ContextCompat.getDrawable(this, R.drawable.ic_arrow_drop_up)
+
         toolbar.setNavigationOnClickListener {
             if (isDropDownVisible) {
                 dropDownNav.visibility = View.GONE

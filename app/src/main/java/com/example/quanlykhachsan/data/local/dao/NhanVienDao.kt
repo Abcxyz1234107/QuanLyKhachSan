@@ -21,4 +21,6 @@ interface NhanVienDao {
 
     @Query("SELECT * FROM nhan_vien WHERE maNhanVien = :id")
     suspend fun getById(id: Int): NhanVien?
+
+    @Query("SELECT COUNT(*) FROM nhan_vien") suspend fun count(): Int
 }

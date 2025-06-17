@@ -6,6 +6,7 @@ import com.example.quanlykhachsan.data.local.database.AppDatabase
 import com.example.quanlykhachsan.data.local.dao.PhongDao
 import com.example.quanlykhachsan.data.local.dao.LoaiPhongDao
 import com.example.quanlykhachsan.data.local.dao.DatPhongDao
+import com.example.quanlykhachsan.data.local.dao.NhanVienDao
 import com.example.quanlykhachsan.data.repository.loaiphong.LoaiPhongRepository
 import com.example.quanlykhachsan.data.repository.loaiphong.LoaiPhongRepositoryImpl
 import dagger.Module
@@ -35,6 +36,9 @@ object DatabaseModule {
     fun provideLoaiPhongRepository(
         dao: LoaiPhongDao
     ): LoaiPhongRepository = LoaiPhongRepositoryImpl(dao)
+
+    @Provides
+    fun provideNhanVienDao(db: AppDatabase): NhanVienDao = db.nhanVienDao()
 
     @Provides
     fun provideDatPhongDao(db: AppDatabase): DatPhongDao =

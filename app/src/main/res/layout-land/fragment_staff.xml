@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Màn hình Quản Lý Nhân Viên – UI thuần XML, API 34 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragmentStaff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Khối nhập liệu -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/formContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        style="@style/Widget_App_BorderedContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Giữ các ô nhập ngang – cuộn ngang khi màn hình hẹp -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Tên nhân viên">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTenNhanVien"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Chức vụ"
+                    android:layout_marginStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtChucVu"
+                        android:inputType="textCapWords"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Lương cơ bản"
+                    android:layout_marginStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtLuongCoBan"
+                        android:inputType="numberDecimal"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Ngày vào làm"
+                    android:layout_marginStart="8dp">
+
+                    <!-- EditText chỉ hiển thị, DatePicker mở trong code -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtNgayVaoLam"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:inputType="date"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Lịch làm việc"
+                    android:layout_marginStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtLichLamViec"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:hint="Số điện thoại"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSoDienThoai"
+                        android:layout_width="wrap_content"
+                        android:inputType="phone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Nút Đặt lại -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDatLai"
+                    style="@style/Widget_App_PrimaryButton"
+                    android:text="Đặt lại"
+                    android:layout_marginStart="12dp"
+                    android:minWidth="96dp"
+                    android:layout_height="48dp"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Khối nút thao tác -->
+    <LinearLayout
+        android:id="@+id/actionContainer"
+        style="@style/Widget_App_BorderedContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        app:layout_constraintTop_toBottomOf="@id/formContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnThem"
+            style="@style/Widget_App_PrimaryButton"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:text="Thêm"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSua"
+            style="@style/Widget_App_PrimaryButton"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:text="Sửa"
+            android:layout_marginStart="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnXoa"
+            style="@style/Widget_App_PrimaryButton"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:text="Xóa"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Danh sách nhân viên -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNhanVien"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/actionContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
