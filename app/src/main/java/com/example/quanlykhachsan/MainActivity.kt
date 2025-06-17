@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.topBar))
 
-        supportActionBar?.setDisplayShowTitleEnabled(false) // Ẩn tiêu đề “QuanLyKhachSan”
-
         val toolbar = findViewById<MaterialToolbar>(R.id.topBar)
         setSupportActionBar(toolbar)
 
@@ -114,11 +112,12 @@ class MainActivity : AppCompatActivity() {
         when (viewId) {
             R.id.navDashboard        -> viewModel.openDashboard(supportFragmentManager, R.id.container)
             R.id.navRoomType         -> viewModel.openRoomTypeManager(supportFragmentManager, R.id.container)
+            R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)
             //R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
 /*          R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
             R.id.navBook             -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
             R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
-            R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)*/
+            */
         }
     }
 }

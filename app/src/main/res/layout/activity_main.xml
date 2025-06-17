@@ -57,18 +57,6 @@
             app:iconTint="@android:color/white" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/navBook"
-            style="@style/SideNavItem"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:checkable="false"
-            android:text="@string/nav_book"
-            app:icon="@drawable/ic_book_room"
-            app:iconGravity="textStart"
-            app:iconTint="@android:color/white" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/navCheckout"
             style="@style/SideNavItem"
             android:layout_width="0dp"
@@ -77,6 +65,18 @@
             android:checkable="false"
             android:text="@string/nav_checkout"
             app:icon="@drawable/ic_payment"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navBook"
+            style="@style/SideNavItem"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:checkable="false"
+            android:text="@string/nav_book"
+            app:icon="@drawable/ic_book_room"
             app:iconGravity="textStart"
             app:iconTint="@android:color/white" />
 
@@ -117,7 +117,7 @@
             app:iconTint="@android:color/white" />
     </LinearLayout>
 
-    <!-- MAIN CONTENT HOST -->
+    <!-- MAIN CONTENT -->
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="0dp"
