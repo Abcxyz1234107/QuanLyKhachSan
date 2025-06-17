@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <!-- ─────────── nhập tên + giá ─────────── -->
+    <!-- Khối nhập liệu -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/formContainer"
         style="@style/Widget_App_BorderedContainer"

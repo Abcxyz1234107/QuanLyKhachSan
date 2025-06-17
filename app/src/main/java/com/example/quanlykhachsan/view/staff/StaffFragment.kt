@@ -41,12 +41,30 @@ class StaffFragment : Fragment(R.layout.fragment_staff) {
             adapter.submitList(list)
         }
 
-        viewModel.staffList.observe(viewLifecycleOwner) { list ->
-            Log.d("StaffFragment", "Danh sách NV size = ${list.size}")   // ← log count
-            adapter.submitList(list)
+        // fill các ô nhập
+        viewModel.selectedNhanVien.observe(viewLifecycleOwner) { nv ->
+            if (nv == null) {
+                binding.edtTenNhanVien.setText("")
+                binding.edtSoDienThoai.setText("")
+            } else {
+                binding.edtTenNhanVien.setText(nv.tenNhanVien)
+                binding.edtSoDienThoai.setText(nv.soDienThoai)
+            }
+        }
+
+        // Bỏ focus các ô nhập khi chạm ngoài
+        binding.root.setOnClickListener {
+            binding.edtTenNhanVien.clearFocus()
+            binding.edtSoDienThoai.clearFocus()
+            hideKeyboard()
         }
     }
 
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
+                as android.view.inputmethod.InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()

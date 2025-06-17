@@ -65,7 +65,7 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
             if (checked) {
                 val min = binding.edtMin.text.toString().toDoubleOrNull() ?: 0.0
                 val max = binding.edtMax.text.toString().toDoubleOrNull() ?: Double.MAX_VALUE
-                // viewModel.filter(min, max)
+                // viewModel.filter(min, max), chưa
             } else {
                 viewModel.reset()
             }

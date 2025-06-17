@@ -46,11 +46,8 @@ class RoomTypeAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        VH(ItemRoomTypeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-
-    override fun onBindViewHolder(holder: VH, position: Int) =
-        holder.bind(getItem(position), position == selectedPos)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(ItemRoomTypeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(getItem(position), position == selectedPos)
 
     companion object {
         private val Diff = object : DiffUtil.ItemCallback<LoaiPhong>() {
