@@ -4,98 +4,102 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    >
 
     <!-- ─────────── nhập tên + giá ─────────── -->
-
-    <!-- ─────────── Thêm / Sửa / Xoá ─────────── -->
-    <LinearLayout
-        android:id="@+id/llInput"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/formContainer"
         style="@style/Widget_App_BorderedContainer"
-        android:layout_width="395dp"
-        android:layout_height="75dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Tên loại phòng -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilName"
-            android:layout_width="200dp"
+        <LinearLayout
+            android:id="@+id/llInput"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-1dp"
-            android:hint="@string/tenloaiphong">
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilName"
                 android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:hint="@string/tenloaiphong">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtName"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Giá loại phòng -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilPrice"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:hint="Giá loại phòng">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPrice"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:hint="Giá loại phòng">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPrice"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtPrice"
-                android:layout_width="160dp"
-                android:layout_height="match_parent"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
+    <!-- ─────────── Thêm / Sửa / Xoá ─────────── -->
     <LinearLayout
         android:id="@+id/llActions"
         style="@style/Widget_App_BorderedContainer"
-        android:layout_width="395dp"
-        android:layout_height="75dp"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llInput"
+        app:layout_constraintTop_toBottomOf="@+id/formContainer"
         tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/btnEdit"
-            style="@style/Widget_App_PrimaryButton"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="-55dp"
-            android:text="Sửa" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAdd"
             style="@style/Widget_App_PrimaryButton"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:text="Thêm" />
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:text="Thêm"
+            />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEdit"
+            style="@style/Widget_App_PrimaryButton"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:text="Sửa"
+            android:layout_marginStart="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDelete"
             style="@style/Widget_App_PrimaryButton"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:text="Xóa" />
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:text="Xóa"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 
     <!-- ─────────── Bộ lọc ─────────── -->
     <LinearLayout
         android:id="@+id/llFilter"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
         style="@style/Widget_App_BorderedContainer"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,31 +119,31 @@
             android:text="Lọc" />
 
         <com.google.android.material.textfield.TextInputLayout
-               android:id="@+id/tilMin"
-               android:layout_width="140dp"
-               android:layout_height="wrap_content"
-               android:layout_marginStart="8dp"
-               android:hint="Giá tối thiểu">
+            android:id="@+id/tilMin"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="Giá tối thiểu">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtMin"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-               android:id="@+id/tilMax"
-               android:layout_width="140dp"
-               android:layout_height="wrap_content"
-               android:layout_marginStart="10dp"
-               android:hint="Giá tối đa">
+            android:id="@+id/tilMax"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:hint="Giá tối đa">
 
-               <com.google.android.material.textfield.TextInputEditText
-                   android:id="@+id/edtMax"
-                   android:layout_width="140dp"
-                   android:layout_height="match_parent"
-                   android:inputType="number" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtMax"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -195,10 +199,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llHeader"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="8dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
