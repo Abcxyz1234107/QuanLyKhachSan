@@ -42,18 +42,16 @@ android {
 }
 
 dependencies {
+    implementation ("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation ("com.google.dagger:hilt-android:2.56.2")
     annotationProcessor ("com.google.dagger:hilt-compiler:2.56.2")
     kapt("com.google.dagger:hilt-compiler:2.56.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
     implementation("com.google.android.material:material:1.12.0")
-
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
