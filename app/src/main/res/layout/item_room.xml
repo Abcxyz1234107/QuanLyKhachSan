@@ -1,35 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardRoom"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    android:elevation="4dp"
-    android:padding="12dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="120dp"
+        android:padding="12dp">
+
+        <!-- Icon trạng thái -->
+
+        <!-- Tên phòng -->
+
+        <!-- Loại phòng -->
+        <ImageView
+            android:id="@+id/ivTrangThai"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="1dp"
+            android:textStyle="bold"
+            android:contentDescription="@string/status_icon"
+            app:layout_constraintBottom_toTopOf="@+id/tvLoaiPhong"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
 
         <TextView
             android:id="@+id/tvTenPhong"
-            android:layout_width="match_parent"
+            style="@style/RoomTextWhiteBold"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Phòng 101"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="4dp"
+            android:paddingEnd="8dp"
+            android:text="P101"
+            android:textSize="24dp"
+            app:layout_constraintEnd_toStartOf="@id/ivTrangThai"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvLoaiPhong"
-            android:layout_width="match_parent"
+            style="@style/RoomTextWhiteNormal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Loại: Thường" />
+            android:text="Phòng đơn"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTenPhong" />
 
+        <!-- Trạng thái -->
         <TextView
             android:id="@+id/tvTrangThai"
-            android:layout_width="match_parent"
+            style="@style/RoomTextWhiteNormal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Trạng thái: Trống" />
-    </LinearLayout>
+            android:text="Đã đặt"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoaiPhong" />
 
-</androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

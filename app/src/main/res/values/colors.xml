@@ -27,4 +27,8 @@
 
     <color name="nav_selected">#407A72</color>
     <color name="nav_pressed">#57918A</color>
+
+    <color name="status_reserved">#E53935</color>
+    <color name="status_empty">#4CAF50</color>
+    <color name="status_in_use">#9E9E9E</color>
 </resources>
