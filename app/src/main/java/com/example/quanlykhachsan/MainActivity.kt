@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         // 2) Gắn listener cho các button trong dropDownNav
         listOf(
-            R.id.navDashboard, R.id.navStatistic,
+            R.id.navDashboard, R.id.navChart,
             R.id.navBook, R.id.navCheckout,
             R.id.navRoom, R.id.navRoomType,
             R.id.navStaff
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Gắn click cho các icon điều hướng còn lại */
         val navBtnIds = listOf(
-            R.id.navDashboard,  R.id.navStatistic,
+            R.id.navDashboard,  R.id.navChart,
             R.id.navBook,       R.id.navCheckout,
             R.id.navRoom,       R.id.navRoomType,
             R.id.navStaff
@@ -117,8 +117,9 @@ class MainActivity : AppCompatActivity() {
             R.id.navDashboard        -> viewModel.openDashboard(supportFragmentManager, R.id.container)
             R.id.navRoomType         -> viewModel.openRoomTypeManager(supportFragmentManager, R.id.container)
             R.id.navStaff            -> viewModel.openStaffManager(supportFragmentManager, R.id.container)
+            R.id.navChart            -> viewModel.openChart(supportFragmentManager, R.id.container)
             //R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
-/*          R.id.navStatistic        -> viewModel.openStatistic(supportFragmentManager, R.id.container)
+/*
             R.id.navBook             -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
             R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
             */
