@@ -1,5 +1,7 @@
 package com.example.quanlykhachsan.view.chart
 
+import android.graphics.Color
+import androidx.core.content.ContextCompat
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -32,24 +34,35 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentChartBinding.bind(view)
 
-        configPieChart()
-        initYearSpinner()
-        observeChartData()
+        configPieCharts()
+        observeChartConfig()
+        observeQuarterData()
     }
 
-    // Cấu hình mặc định cho PieChart
-    private fun configPieChart() = with(binding.pieChart) {
-        setUsePercentValues(false)        // hiển thị giá trị tuyệt đối, không %
-        description.isEnabled = false
-        isDrawHoleEnabled = true
-        holeRadius = 40f
-        setEntryLabelTextSize(12f)
-
-        legend.apply {
-            verticalAlignment = Legend.LegendVerticalAlignment.CENTER
-            horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-            orientation = Legend.LegendOrientation.VERTICAL
-            isWordWrapEnabled = true
+    // -------------------- cấu hình 4 PieChart --------------------
+    private fun configPieCharts() {
+        listOf(
+            binding.pieChartQ1, binding.pieChartQ2,
+            binding.pieChartQ3, binding.pieChartQ4
+        ).forEach { chart ->
+            chart.apply {
+                setUsePercentValues(false)
+                description.isEnabled = false
+                isDrawHoleEnabled = false    // bỏ vòng trong ở tâm
+                holeRadius = 0f
+                transparentCircleRadius = 0f
+                setEntryLabelTextSize(viewModel.valueTextSize.value ?: 12f)
+                legend.isEnabled = false
+            }
+        }
+    }
+    // -------------------- LiveData  --------------------
+    private fun observeChartConfig() {
+        viewModel.valueTextSize.observe(viewLifecycleOwner) { size ->
+            listOf(
+                binding.pieChartQ1, binding.pieChartQ2,
+                binding.pieChartQ3, binding.pieChartQ4
+            ).forEach { it.setEntryLabelTextSize(size) }
         }
     }
 
@@ -75,17 +88,39 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
     }
 
     // Lắng nghe LiveData PieEntry từ ViewModel
-    private fun observeChartData() {
-        viewModel.pieEntries.observe(viewLifecycleOwner) { entries ->
-            val dataSet = PieDataSet(entries, "").apply {
-                setDrawValues(true)
-                valueFormatter = object : ValueFormatter() {
-                    override fun getPieLabel(value: Float, entry: PieEntry?): String =
-                        vnCurrency.format(value.toLong())          // hiển thị VNĐ
-                }
+    private fun observeQuarterData() {
+        viewModel.quarterlyEntries.observe(viewLifecycleOwner) { map ->
+            val defaultColors = listOf(
+                Color.parseColor("#2196F3"), Color.parseColor("#4CAF50"),
+                Color.parseColor("#FFC107"), Color.parseColor("#F44336"),
+                Color.parseColor("#9C27B0"), Color.parseColor("#03A9F4")
+            )
+            val sliceColors = viewModel.sliceColors.value ?: defaultColors
+
+            // Helper để tạo PieData
+            fun toPieData(entries: List<PieEntry>) = PieData(
+                PieDataSet(entries, "").apply {
+                    colors = sliceColors
+                    valueFormatter = object : ValueFormatter() {
+                        override fun getPieLabel(value: Float, entry: PieEntry?): String =
+                            vnCurrency.format(value.toLong())
+                    }
+                    valueTextSize = viewModel.valueTextSize.value ?: 12f
+                })
+
+            // Gán dữ liệu cho từng chart; ẩn chart nếu quý không có
+            listOf(
+                binding.pieChartQ1 to 1,
+                binding.pieChartQ2 to 2,
+                binding.pieChartQ3 to 3,
+                binding.pieChartQ4 to 4
+            ).forEach { (chart, qIndex) ->
+                map[qIndex]?.let { entries ->
+                    chart.visibility = View.VISIBLE
+                    chart.data = toPieData(entries)
+                    chart.invalidate()
+                } ?: run { chart.visibility = View.GONE }
             }
-            binding.pieChart.data = PieData(dataSet)
-            binding.pieChart.invalidate() // refresh
         }
     }
 }

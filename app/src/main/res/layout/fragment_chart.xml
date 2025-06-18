@@ -1,27 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- chọn năm -->
-    <Spinner
-        android:id="@+id/spYear"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!-- PieChart -->
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChart"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spYear"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingClass" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- ── Chọn năm ── -->
+        <Spinner
+            android:id="@+id/spYear"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ── 4 biểu đồ: Q1-Q4 ── -->
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChartQ1"
+            style="@style/QuarterChartStyle"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spYear" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChartQ2"
+            style="@style/QuarterChartStyle"
+            app:layout_constraintTop_toBottomOf="@id/pieChartQ1"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChartQ3"
+            style="@style/QuarterChartStyle"
+
+            app:layout_constraintStart_toEndOf="@+id/pieChartQ1"
+            app:layout_constraintTop_toBottomOf="@+id/spYear" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChartQ4"
+            style="@style/QuarterChartStyle"
+            app:layout_constraintStart_toEndOf="@+id/pieChartQ2"
+            app:layout_constraintTop_toBottomOf="@id/pieChartQ3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

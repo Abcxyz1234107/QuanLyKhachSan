@@ -91,5 +91,10 @@
         <item name="android:shadowRadius">1</item>
     </style>
 
+    <style name="QuarterChartStyle">
+        <item name="android:layout_width">193dp</item>
+        <item name="android:layout_height">300dp</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
 
 </resources>
