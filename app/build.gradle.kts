@@ -41,7 +41,14 @@ android {
     }
 }
 
+repositories {
+    google()
+    mavenCentral()
+    maven("https://jitpack.io")
+}
+
 dependencies {
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation ("com.google.dagger:hilt-android:2.56.2")
