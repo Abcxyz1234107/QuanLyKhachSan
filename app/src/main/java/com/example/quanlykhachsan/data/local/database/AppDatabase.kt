@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import com.example.quanlykhachsan.data.local.Converters
 import com.example.quanlykhachsan.data.local.dao.*
 import com.example.quanlykhachsan.data.local.entity.*
+import com.example.quanlykhachsan.data.local.model.*
 
 @Database(
     entities = [

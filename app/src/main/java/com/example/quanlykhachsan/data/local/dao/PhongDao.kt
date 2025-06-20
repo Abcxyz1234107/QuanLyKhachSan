@@ -3,6 +3,8 @@ package com.example.quanlykhachsan.data.local.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.quanlykhachsan.data.local.entity.Phong
+import com.example.quanlykhachsan.data.local.model.PhongWithLoaiPhong
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PhongDao {
@@ -27,4 +29,15 @@ interface PhongDao {
 
     @Query("SELECT * FROM phong ORDER BY maPhong")
     suspend fun getAllSync(): List<Phong>
+
+    // Lấy mã phòng + tên loại phòng
+    @Query("""
+    SELECT  p.maPhong              AS maPhong,
+            lp.tenLoaiPhong        AS tenLoaiPhong
+    FROM    phong p
+            JOIN loai_phong lp ON lp.maLoaiPhong = p.maLoaiPhong
+    ORDER BY p.maPhong
+""")
+    fun getRoomsWithType(): Flow<List<PhongWithLoaiPhong>>
+
 }
