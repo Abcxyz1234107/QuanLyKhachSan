@@ -3,6 +3,7 @@ package com.example.quanlykhachsan.data.local.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.quanlykhachsan.data.local.entity.LoaiPhong
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LoaiPhongDao {
@@ -18,6 +19,9 @@ interface LoaiPhongDao {
 
     @Query("SELECT * FROM loai_phong ORDER BY tenLoaiPhong")
     fun getAll(): LiveData<List<LoaiPhong>>
+
+    @Query("SELECT tenLoaiPhong FROM loai_phong ORDER BY tenLoaiPhong")
+    fun getAllNames(): Flow<List<String>>
 
     @Query("SELECT * FROM loai_phong WHERE maLoaiPhong = :id")
     suspend fun getById(id: Int): LoaiPhong?

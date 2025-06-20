@@ -33,9 +33,11 @@ object DatabaseModule {
     @Provides
     fun provideLoaiPhongDao(db: AppDatabase): LoaiPhongDao =
         db.loaiPhongDao()
-    fun provideLoaiPhongRepository(
-        dao: LoaiPhongDao
-    ): LoaiPhongRepository = LoaiPhongRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun provideLoaiPhongRepository(dao: LoaiPhongDao):
+            LoaiPhongRepository = LoaiPhongRepositoryImpl(dao)
 
     @Provides
     fun provideNhanVienDao(db: AppDatabase): NhanVienDao = db.nhanVienDao()

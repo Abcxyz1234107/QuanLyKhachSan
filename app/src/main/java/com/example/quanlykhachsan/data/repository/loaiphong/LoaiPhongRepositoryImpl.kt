@@ -3,6 +3,7 @@ package com.example.quanlykhachsan.data.repository.loaiphong
 import com.example.quanlykhachsan.data.local.dao.LoaiPhongDao
 import com.example.quanlykhachsan.data.local.entity.LoaiPhong
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,6 +14,7 @@ class LoaiPhongRepositoryImpl @Inject constructor(
 ) : LoaiPhongRepository {
 
     override fun getAll() = dao.getAll()
+    override fun getAllNames() = dao.getAllNames()
 
     override suspend fun insert(loaiPhong: LoaiPhong) =
         withContext(Dispatchers.IO) { dao.insert(loaiPhong) }
