@@ -25,6 +25,9 @@ class RoomAdapter(
             tvId.text = item.id.toString()
             tvName.text = item.typeName
 
+            // highlight nếu đang chọn
+            root.isSelected = item.id == selectedId
+
             root.setOnClickListener {
                 selectedId = if (selectedId == item.id) null else item.id
                 onClick(item)

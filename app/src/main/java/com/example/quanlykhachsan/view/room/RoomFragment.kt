@@ -54,8 +54,7 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
 
         /* ---------- RecyclerView Danh sách phòng ---------- */
         roomAdapter = RoomAdapter { item ->
-            // Khi chọn 1 dòng ⇒ highlight & đổ lại form
-            binding.edtId.setText(item.id.toString())
+            binding.edtId.setText(item.id.toString())      // Khi chọn 1 dòng ⇒ highlight & đổ lại form
             binding.actvRoomType.setText(item.typeName, false)
         }
         binding.rvRoomTypes.apply {
@@ -63,7 +62,9 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        // TODO: quan sát LiveData/Flow phòng từ ViewModel rồi submitList(roomAdapter)
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.rooms.collectLatest { list -> roomAdapter.submitList(list) }
+        }
     }
 
     override fun onDestroyView() {
