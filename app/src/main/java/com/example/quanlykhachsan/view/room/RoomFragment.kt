@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.ArrayAdapter
+import com.example.quanlykhachsan.view.room.SuggestionsAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +16,8 @@ import com.example.quanlykhachsan.viewmodel.RoomViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import android.view.MotionEvent
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @AndroidEntryPoint
 class RoomFragment : Fragment(R.layout.fragment_room) {
@@ -27,43 +29,54 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
     /**  Adapter cho RecyclerView hiển thị phòng  */
     private lateinit var roomAdapter: RoomAdapter
     /**  Adapter cho ComboBox loại phòng  */
-    private lateinit var comboAdapter: ArrayAdapter<String>
+    private lateinit var comboAdapter: SuggestionsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentRoomBinding.bind(view)
 
         /* ---------- ComboBox Tên loại phòng ---------- */
-        comboAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_dropdown_item_1line, mutableListOf())
+        comboAdapter = SuggestionsAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    mutableListOf()
+        )
         binding.actvRoomType.setAdapter(comboAdapter)
 
-        // gõ tới đâu -> ViewModel lọc tới đó & luôn mở dropdown
-        binding.actvRoomType.doAfterTextChanged {
-            vm.updateQuery(it ?: "")
-            binding.actvRoomType.showDropDown()
+        // gõ tới đâu -> ViewModel lọc tới đó
+        binding.actvRoomType.doAfterTextChanged { text ->
+            vm.updateQuery(text ?: "")
         }
 
         // quan sát suggestions từ ViewModel
         viewLifecycleOwner.lifecycleScope.launch {
             vm.suggestions.collectLatest { list ->
-                comboAdapter.clear()
-                comboAdapter.addAll(list)
-                comboAdapter.notifyDataSetChanged()
+                            comboAdapter.updateData(list)
+                            // nếu đang focus hoặc ngay khi xóa sạch, cứ show dropdown
+                            if (binding.actvRoomType.isFocused) {
+                                    binding.actvRoomType.showDropDown()
+                            }
             }
         }
 
         /* ---------- RecyclerView Danh sách phòng ---------- */
         roomAdapter = RoomAdapter { item ->
-            binding.edtId.setText(item.id.toString())      // Khi chọn 1 dòng ⇒ highlight & đổ lại form
-            binding.actvRoomType.setText(item.typeName, false)
+            binding.edtId.setText(item.id.toString())      // Khi chọn 1 dòng ⇒ highlight, và tự fill vào các ô input
+            // binding.actvRoomType.setText(item.typeName, false)
         }
-        binding.rvRoomTypes.apply {
+        binding.rvRoom.apply {
             adapter = roomAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             vm.rooms.collectLatest { list -> roomAdapter.submitList(list) }
+        }
+
+        // Bỏ focus khi ấn ngoài EditText
+        binding.root.setOnTouchListener { v, event ->
+            v.clearFocus()
+            requireActivity().currentFocus?.clearFocus()
+            false
         }
     }
 

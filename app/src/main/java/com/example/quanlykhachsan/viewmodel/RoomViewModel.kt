@@ -22,12 +22,13 @@ class RoomViewModel @Inject constructor(
     private val _query = MutableStateFlow("")
 
     /**  Gợi ý sau khi lọc (không phân biệt hoa thường, dấu cách)  */
-    val suggestions: StateFlow<List<String>> =
-        combine(_allRoomTypeNames, _query.debounce(100)) { all, q ->
-            val key = q.normalized()
-            if (key.isBlank()) all
-            else all.filter { it.normalized().contains(key) }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val suggestions: Flow<List<String>> =
+                combine(_allRoomTypeNames, _query) { all, q ->
+                        val key = q.normalized()
+                        val filtered = if (key.isBlank()) all
+                                      else all.filter { it.normalized().contains(key) }
+                        if (filtered.isEmpty()) all else filtered
+                }
 
     init {
         //  Lấy tên loại phòng cho ComboBox
@@ -50,7 +51,9 @@ class RoomViewModel @Inject constructor(
     val rooms: StateFlow<List<RoomItem>> get() = _rooms
 
     /** Call từ Fragment khi text thay đổi  */
-    fun updateQuery(text: CharSequence) = _query.tryEmit(text.toString())
+    fun updateQuery(text: CharSequence) {
+        _query.value = text.toString()
+    }
 
     /**  hàm cho comboBox: xoá khoảng trắng + lowerCase  */
     private fun String.normalized() = replace("\\s".toRegex(), "").lowercase()
