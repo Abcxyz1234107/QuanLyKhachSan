@@ -76,7 +76,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAdd"
             style="@style/Widget_App_PrimaryButton"
-            android:layout_width="96dp"
+            android:layout_width="90dp"
             android:layout_height="48dp"
             android:text="Thêm"
             />
@@ -84,7 +84,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEdit"
             style="@style/Widget_App_PrimaryButton"
-            android:layout_width="96dp"
+            android:layout_width="90dp"
             android:layout_height="48dp"
             android:text="Sửa"
             android:layout_marginStart="8dp"/>
@@ -92,7 +92,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDelete"
             style="@style/Widget_App_PrimaryButton"
-            android:layout_width="96dp"
+            android:layout_width="90dp"
             android:layout_height="48dp"
             android:text="Xóa"
             android:layout_marginStart="8dp"/>
