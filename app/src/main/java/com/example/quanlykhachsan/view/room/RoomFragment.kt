@@ -34,6 +34,29 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentRoomBinding.bind(view)
 
+        // Fill form
+        roomAdapter = RoomAdapter { item ->
+            vm.onItemSelected(item)
+        }
+
+        // Thêm
+        binding.btnAdd.setOnClickListener {
+            vm.add(
+                binding.edtId.text.toString(),
+                binding.actvRoomType.text
+            )
+        }
+
+        // Sửa
+        binding.btnEdit.setOnClickListener {
+            vm.editCurrent(binding.actvRoomType.text)
+        }
+
+        // Xóa
+        binding.btnDelete.setOnClickListener {
+            vm.deleteCurrent()
+        }
+
         /* ---------- ComboBox Tên loại phòng ---------- */
         comboAdapter = SuggestionsAdapter(
                     requireContext(),
