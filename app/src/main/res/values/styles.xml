@@ -97,4 +97,16 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
+    <style name="ThemeOverlay.App.DatePicker.Spinner" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:datePickerStyle">@style/SpinnerDatePickerStyle</item>
+    </style>
+
+    <style name="SpinnerDatePickerStyle" parent="@android:style/Widget.Holo.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
+    <style name="Widget_App_FadeButton" parent="Widget_App_PrimaryButton">
+        <item name="android:background">@drawable/bg_primary_button_fade</item>
+    </style>
+
 </resources>

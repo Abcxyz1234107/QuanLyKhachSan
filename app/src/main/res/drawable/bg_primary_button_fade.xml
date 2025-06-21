@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Selector + fade  ↔  sáng khi nhấn -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:enterFadeDuration="80"
+    android:exitFadeDuration="320">
+
+    <!-- nhấn -->
+<item android:state_pressed="true">
+<shape android:shape="rectangle">
+    <solid android:color="@color/teal_400" />
+    <corners android:radius="8dp" />
+</shape>
+</item>
+
+    <!-- Mặc định (màu GỐC) -->
+<item>
+<shape android:shape="rectangle">
+    <solid android:color="@color/teal_600" />
+    <corners android:radius="8dp" />
+</shape>
+</item>
+    </selector>

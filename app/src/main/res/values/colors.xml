@@ -31,4 +31,7 @@
     <color name="status_reserved">#E53935</color>
     <color name="status_empty">#4CAF50</color>
     <color name="status_in_use">#9E9E9E</color>
+
+    <color name="colorPrimaryBtn">#1E88E5</color>
+    <color name="colorPrimaryBtnLight">#6EB4F1</color>
 </resources>
