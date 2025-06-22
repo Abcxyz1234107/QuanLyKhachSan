@@ -42,46 +42,48 @@ class PaymentViewModel @Inject constructor(
         }
 
     /** Hàm nút Thêm */
-    fun addPayment(roomIdStr: String, payType: String) = viewModelScope.launch(Dispatchers.IO) {
-        val roomId = roomIdStr.toIntOrNull()
-                if (roomId == null) {
-                        _notification.postValue("Mã phòng không hợp lệ")
-                        return@launch
-                }
-        // tìm đặt phòng
-        val booking = datPhongDao.getByPhongSync(roomId).firstOrNull()
-        if (booking == null) {
-            _notification.postValue("Không tìm thấy đặt phòng cho phòng $roomId")
-            return@launch
-        }
-        // lấy thông tin phòng & loại phòng
-        val room = phongDao.getById(roomId)
-        if (room == null) {
-            _notification.postValue("Phòng $roomId không tồn tại")
-            return@launch
-        }
-        val lp = loaiPhongDao.getById(room.maLoaiPhong)
-        if (lp == null) {
-            _notification.postValue("Không tìm thấy loại phòng cho phòng $roomId")
-            return@launch
-        }
+    fun addPayment(roomIdStr: String, payType: String, paymentDate: Date) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val roomId = roomIdStr.toIntOrNull()
+            if (roomId == null) {
+                _notification.postValue("Mã phòng không hợp lệ")
+                return@launch
+            }
 
-        val millisPerDay = 86_400_000L
-        val days = max(
-            1,
-            ((booking.ngayTraPhong ?: Date()).time - booking.ngayNhanPhong.time) / millisPerDay
-        )
-        val total = days * lp.gia
+            val booking = datPhongDao.getByPhongSync(roomId).firstOrNull()
+            if (booking == null) {
+                _notification.postValue("Không tìm thấy đặt phòng cho phòng $roomId")
+                return@launch
+            }
 
-        traPhongDao.insert(
-            TraPhong(
-                maDatPhong         = booking.maDatPhong,
-                tongTien           = total,
-                hinhThucThanhToan  = payType,
-                ngayThanhToan      = Date(),
-                ghiChu             = "$days ngày * ${lp.gia}"
+            val room = phongDao.getById(roomId)
+            if (room == null) {
+                _notification.postValue("Phòng $roomId không tồn tại")
+                return@launch
+            }
+
+            val lp = loaiPhongDao.getById(room.maLoaiPhong)
+            if (lp == null) {
+                _notification.postValue("Không tìm thấy loại phòng cho phòng $roomId")
+                return@launch
+            }
+
+            val millisPerDay = 86_400_000L
+            val days = max(
+                1,
+                ((booking.ngayTraPhong ?: Date()).time - booking.ngayNhanPhong.time) / millisPerDay
             )
-        )
-        _notification.postValue("Trả phòng thành công! Tổng: ${total.toLong()} vnđ")
-    }
+            val total = days * lp.gia
+
+            traPhongDao.insert(
+                TraPhong(
+                    maDatPhong        = booking.maDatPhong,
+                    tongTien          = total,
+                    hinhThucThanhToan = payType,
+                    ngayThanhToan     = paymentDate,
+                    ghiChu            = "$days ngày * ${lp.gia}"
+                )
+            )
+            _notification.postValue("Trả phòng thành công! Tổng: ${total.toLong()} vnđ")
+        }
 }

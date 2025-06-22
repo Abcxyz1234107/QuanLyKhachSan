@@ -8,6 +8,8 @@ import com.example.quanlykhachsan.data.local.dao.LoaiPhongDao
 import com.example.quanlykhachsan.data.local.dao.DatPhongDao
 import com.example.quanlykhachsan.data.local.dao.NhanVienDao
 import com.example.quanlykhachsan.data.local.dao.TraPhongDao
+import com.example.quanlykhachsan.data.repository.chart.ChartRepository
+import com.example.quanlykhachsan.data.repository.chart.ChartRepositoryImpl
 import com.example.quanlykhachsan.data.repository.loaiphong.LoaiPhongRepository
 import com.example.quanlykhachsan.data.repository.loaiphong.LoaiPhongRepositoryImpl
 import com.example.quanlykhachsan.data.repository.phong.PhongRepository
@@ -57,4 +59,8 @@ object DatabaseModule {
     @Provides
     fun provideTraPhongDao(db: AppDatabase): TraPhongDao =
         db.traPhongDao()
+
+    @Provides
+    fun provideChartRepository(dao: TraPhongDao): ChartRepository =
+        ChartRepositoryImpl(dao)
 }

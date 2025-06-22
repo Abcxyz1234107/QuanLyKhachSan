@@ -34,6 +34,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentChartBinding.bind(view)
 
+        initYearSpinner()
         configPieCharts()
         observeChartConfig()
         observeQuarterData()

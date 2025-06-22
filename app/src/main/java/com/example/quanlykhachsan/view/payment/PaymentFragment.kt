@@ -71,7 +71,10 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         binding.btnAdd.setOnClickListener {
             val roomId  = binding.edtRoomId.text.toString()
             val payType = binding.actvPaymentType.text.toString()
-            viewModel.addPayment(roomId, payType)
+            val payDate = sdf.parse(binding.edtDateIn.text.toString())
+            if (payDate != null) {
+                viewModel.addPayment(roomId, payType, payDate)
+            }
         }
 
         /* Tự động cập nhật ngày thanh toán */
