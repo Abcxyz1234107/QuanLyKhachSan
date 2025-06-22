@@ -120,10 +120,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navChart            -> viewModel.openChart(supportFragmentManager, R.id.container)
             R.id.navRoom             -> viewModel.openRoomManager(supportFragmentManager, R.id.container)
             R.id.navBook             -> viewModel.openBookRoom(supportFragmentManager, R.id.container)
-/*
-
-            R.id.navCheckout         -> viewModel.openCheckOut(supportFragmentManager, R.id.container)
-            */
+            R.id.navCheckout         -> viewModel.openPayment(supportFragmentManager, R.id.container)
         }
     }
 }
