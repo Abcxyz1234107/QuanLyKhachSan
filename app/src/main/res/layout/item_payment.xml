@@ -25,10 +25,10 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/tvPaymentType"
+        android:id="@+id/tvDateOut"
         android:layout_width="0dp"
-        android:layout_weight="3"
-        android:hint="payment type"
+        android:layout_weight="2"
+        android:hint="payment date"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         />

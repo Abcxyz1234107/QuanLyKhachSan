@@ -264,7 +264,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:text="HT thanh toán"
+            android:text="Ngày thanh toán"
             android:textAlignment="center"
             android:textColor="@android:color/darker_gray"
             android:textSize="18sp"
@@ -272,7 +272,7 @@
 
     </LinearLayout>
 
-    <!-- ─────────── Danh sách đặt phòng ─────────── -->
+    <!-- ─────────── Danh sách trả phòng ─────────── -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBook"
         android:layout_width="match_parent"

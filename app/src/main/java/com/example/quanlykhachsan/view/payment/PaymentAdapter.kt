@@ -21,8 +21,7 @@ class PaymentAdapter :
         fun bind(item: PaymentItem, isSelected: Boolean) = with(binding) {
             tvId.text            = item.roomId.toString()
             tvTotalPayment.text  = "%.0f".format(item.total)
-            tvPaymentType.text   = item.payType
-            /* Highlight nhờ bg_room_type_item */
+            tvDateOut.text   = item.paymentDate
             root.isSelected = isSelected   // bg selector đổi màu khi selected=true
         }
     }
@@ -57,7 +56,7 @@ class PaymentAdapter :
     companion object {
         private val diff = object : DiffUtil.ItemCallback<PaymentItem>() {
             override fun areItemsTheSame(o: PaymentItem, n: PaymentItem) =
-                o.roomId == n.roomId && o.payType == n.payType
+                o.roomId == n.roomId && o.paymentDate  == n.paymentDate
             override fun areContentsTheSame(o: PaymentItem, n: PaymentItem) = o == n
         }
     }

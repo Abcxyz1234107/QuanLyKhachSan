@@ -9,6 +9,7 @@ import com.example.quanlykhachsan.data.local.entity.TraPhong
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.max
@@ -26,16 +27,18 @@ class PaymentViewModel @Inject constructor(
     val notification: LiveData<String> = _notification
 
     /** Dữ liệu hiển thị trên RecyclerView */
-    data class PaymentItem(val roomId: Int, val total: Double, val payType: String)
+    data class PaymentItem(val roomId: Int, val total: Double, val paymentDate: String)
 
     /** LiveData để UI observe */
     val payments: LiveData<List<PaymentItem>> =
         traPhongDao.getAll().switchMap { list ->
             liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
+                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val uiList = list.map { tra ->
                     val datPhong   = datPhongDao.getById(tra.maDatPhong)
                     val roomId     = datPhong?.maPhong ?: -1
-                    PaymentItem(roomId, tra.tongTien, tra.hinhThucThanhToan)
+                    val dateStr  = sdf.format(tra.ngayThanhToan)
+                    PaymentItem(roomId, tra.tongTien, dateStr)
                 }
                 emit(uiList)
             }

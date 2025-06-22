@@ -53,7 +53,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 binding.actvPaymentType.setText("", false)
             } else {
                 binding.edtRoomId.setText(item.roomId.toString())
-                binding.actvPaymentType.setText(item.payType, false)
+                binding.actvPaymentType.setText(item.paymentDate, false)
             }
         }
 
