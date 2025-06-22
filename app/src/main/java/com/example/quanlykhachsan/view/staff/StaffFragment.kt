@@ -3,6 +3,7 @@ package com.example.quanlykhachsan.view.staff
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.quanlykhachsan.R
@@ -57,6 +58,33 @@ class StaffFragment : Fragment(R.layout.fragment_staff) {
             binding.edtTenNhanVien.clearFocus()
             binding.edtSoDienThoai.clearFocus()
             hideKeyboard()
+        }
+
+        // 1. Gán click cho các nút
+        binding.btnAdd?.setOnClickListener {
+            viewModel.addNhanVien(
+                binding.edtTenNhanVien.text.toString(),
+                binding.edtSoDienThoai.text.toString()
+            )
+        }
+        binding.btnEdit?.setOnClickListener {
+            viewModel.updateNhanVien(
+                binding.edtTenNhanVien.text.toString(),
+                binding.edtSoDienThoai.text.toString()
+            )
+        }
+        binding.btnDelete?.setOnClickListener { viewModel.deleteNhanVien() }
+
+        // 2. Lắng nghe toastEvent (toast: các messagee thông báo)
+        viewModel.toastEvent.observe(viewLifecycleOwner) { msg ->
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+            if (msg.startsWith("Đã")) {          // thành công → clear form
+                binding.edtTenNhanVien.setText("")
+                binding.edtSoDienThoai.setText("")
+                binding.edtTenNhanVien.clearFocus()
+                binding.edtSoDienThoai.clearFocus()
+                hideKeyboard()
+            }
         }
     }
 

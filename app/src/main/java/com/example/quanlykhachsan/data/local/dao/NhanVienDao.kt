@@ -23,4 +23,8 @@ interface NhanVienDao {
     suspend fun getById(id: Int): NhanVien?
 
     @Query("SELECT COUNT(*) FROM nhan_vien") suspend fun count(): Int
+
+    @Query("SELECT MAX(maNhanVien) FROM nhan_vien") suspend fun getMaxMaNhanVien(): Int?
+    @Query("UPDATE nhan_vien SET maNhanVien = maNhanVien - 1 WHERE maNhanVien > :deletedId") suspend fun shiftIdsAfter(deletedId: Int)
+    @Query("SELECT * FROM nhan_vien ORDER BY tenNhanVien") suspend fun getAllOnce(): List<NhanVien>
 }
