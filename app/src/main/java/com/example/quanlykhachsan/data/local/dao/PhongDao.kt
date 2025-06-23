@@ -40,4 +40,6 @@ interface PhongDao {
 """)
     fun getRoomsWithType(): Flow<List<PhongWithLoaiPhong>>
 
+    @Query("SELECT COUNT(*) FROM phong WHERE maLoaiPhong = :maLoaiPhong")
+    suspend fun countByLoaiPhong(maLoaiPhong: Int): Int
 }

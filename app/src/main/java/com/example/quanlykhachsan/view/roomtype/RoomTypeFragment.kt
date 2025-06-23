@@ -2,6 +2,7 @@ package com.example.quanlykhachsan.view.roomtype
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,15 +17,14 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
     private var _binding: FragmentRoomTypeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RoomTypeViewModel by viewModels()
-
+    private fun priceInput() = binding.edtPrice.text.toString().toFloatOrNull() ?: 0f
     private lateinit var adapter: RoomTypeAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _binding = FragmentRoomTypeBinding.bind(view)
-        binding.rvRoomTypes.layoutManager = LinearLayoutManager(requireContext())
 
+        /* ---------- RecyclerView ---------- */
         adapter = RoomTypeAdapter { selected ->
             if (selected == null) {
                 binding.edtName.text?.clear()
@@ -36,40 +36,30 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
                 viewModel.onItemSelected(selected)
             }
         }
-        binding.rvRoomTypes.adapter = adapter
         binding.rvRoomTypes.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvRoomTypes.adapter       = adapter
         viewModel.roomTypes.observe(viewLifecycleOwner) { adapter.submitList(it) }
 
-        // Thêm loại phòng
+        /* ---------- Message ---------- */
+        viewModel.message.observe(viewLifecycleOwner) { msg ->
+            msg?.let { android.widget.Toast.makeText(requireContext(), it, android.widget.Toast.LENGTH_SHORT).show() }
+        }
+
+        /* ---------- Nút ---------- */
         binding.btnAdd.setOnClickListener {
-            val name = binding.edtName.text
-            val price = binding.edtPrice.text.toString().toFloatOrNull() ?: 0f
-            viewModel.add(name, price)
+            viewModel.add(binding.edtName.text, priceInput())
         }
-
-        // Sửa loại phòng
         binding.btnEdit.setOnClickListener {
-            val name = binding.edtName.text
-            val price = binding.edtPrice.text.toString().toFloatOrNull() ?: 0f
-            viewModel.editCurrent(name, price)
+            viewModel.editCurrent(binding.edtName.text, priceInput())
         }
+        binding.btnDelete.setOnClickListener { viewModel.deleteCurrent() }
 
-        // Xóa loại phòng
-        binding.btnDelete.setOnClickListener {
-            viewModel.deleteCurrent()
-        }
+        /* ---------- Filter ---------- */
+        updateFilter()
 
-        // Bật/tắt filter
-        binding.cbFilter.setOnCheckedChangeListener { _, checked ->
-            viewModel.setFilterEnabled(checked)
-            if (checked) {
-                val min = binding.edtMin.text.toString().toDoubleOrNull() ?: 0.0
-                val max = binding.edtMax.text.toString().toDoubleOrNull() ?: Double.MAX_VALUE
-                // viewModel.filter(min, max), chưa
-            } else {
-                viewModel.reset()
-            }
-        }
+        binding.cbFilter.setOnCheckedChangeListener { _, _ -> updateFilter() }
+        binding.edtMin.doOnTextChanged { _, _, _, _ -> if (binding.cbFilter.isChecked) updateFilter() }
+        binding.edtMax.doOnTextChanged { _, _, _, _ -> if (binding.cbFilter.isChecked) updateFilter() }
 
         // Bỏ focus các ô nhập khi chạm ngoài
         binding.root.setOnClickListener {
@@ -81,6 +71,12 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
         }
     }
 
+
+    private fun updateFilter() = viewModel.setFilter(
+        binding.cbFilter.isChecked,
+        binding.edtMin.text.toString().toDoubleOrNull() ?: 0.0,
+        binding.edtMax.text.toString().toDoubleOrNull() ?: Double.MAX_VALUE
+    )
     private fun hideKeyboard() {
         val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
                 as android.view.inputmethod.InputMethodManager

@@ -100,7 +100,7 @@
         style="@style/Widget_App_BorderedContainer"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -128,7 +128,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtMin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,7 +142,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtMax"
                 android:layout_width="140dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
