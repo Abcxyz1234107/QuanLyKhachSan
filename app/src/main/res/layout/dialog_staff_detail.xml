@@ -24,17 +24,6 @@
             android:gravity="center"/>
 
         <!-- Mã NV (không sửa) -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mã nhân viên"
-            android:layout_marginTop="12dp"/>
-        <TextView
-            android:id="@+id/tvDetailMaNhanVien"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            />
 
         <!-- Tên -->
         <com.google.android.material.textfield.TextInputLayout

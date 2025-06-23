@@ -146,7 +146,6 @@ class StaffFragment : Fragment(R.layout.fragment_staff) {
         var isSaved = false
 
         // 1. Fill dữ liệu mặc định
-        dialogBinding.tvDetailMaNhanVien.text    = nv.maNhanVien.toString()
         dialogBinding.edtDetailTenNhanVien.setText(nv.tenNhanVien)
         dialogBinding.edtDetailSoDienThoai.setText(nv.soDienThoai)
         dialogBinding.edtDetailChucVu.setText(nv.chucVu)

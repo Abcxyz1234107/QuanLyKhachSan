@@ -117,21 +117,11 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/tvHeaderId"
-            android:layout_width="34dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Mã nhân viên"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/tvHeaderName"
             android:layout_width="2dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:text="Họ tên"
+            android:text="Tên đầy đủ"
             android:textAlignment="center"
             android:textColor="@android:color/darker_gray"
             android:textSize="18sp"
@@ -142,7 +132,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:text="SĐT"
+            android:text="Số điện thoại"
             android:textAlignment="center"
             android:textColor="@android:color/darker_gray"
             android:textSize="18sp"

@@ -40,7 +40,6 @@ class RoomTypeAdapter(
 
         fun bind(item: LoaiPhong, isSelected: Boolean) = with(b) {
             root.isSelected = isSelected
-            tvId.text = item.maLoaiPhong.toString()
             tvName.text = item.tenLoaiPhong
             tvPrice.text = item.gia.toString()
         }

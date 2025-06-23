@@ -53,10 +53,7 @@ class StaffViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val maxId = dao.getMaxMaNhanVien() ?: 0
-            val newId = maxId + 1
             val nv = NhanVien(
-                maNhanVien  = newId,
                 tenNhanVien = name,
                 soDienThoai = phone,
                 chucVu = "",
@@ -66,7 +63,6 @@ class StaffViewModel @Inject constructor(
             )
 
             dao.insert(nv)
-            reorderNhanVien()
             toastEvent.postValue("Đã thêm nhân viên [$name]")
         }
     }
@@ -84,7 +80,6 @@ class StaffViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             dao.update(current.copy(tenNhanVien = name, soDienThoai = phone))
-            reorderNhanVien()
             toastEvent.postValue("Đã cập nhật thông tin nhân viên [$name]")
         }
     }
@@ -97,29 +92,14 @@ class StaffViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             dao.delete(current)
-            dao.shiftIdsAfter(current.maNhanVien)
-            reorderNhanVien()
             _selectedNhanVien.postValue(null) // Clear selection & thông báo
             toastEvent.postValue("Đã xóa nhân viên [${current.maNhanVien}]")
-        }
-    }
-
-    private suspend fun reorderNhanVien() {
-        val sorted = dao.getAllOnce()
-        sorted.forEachIndexed { index, nv ->
-            dao.update(nv.copy(maNhanVien = index + 1))
         }
     }
 
     fun updateNhanVienFull(nv: NhanVien) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.update(nv)
-            reorderNhanVien()               // giữ ID theo thứ tự chữ cái
-            val updatedList = dao.getAllOnce()
-            val newNv = updatedList.find {
-                            it.tenNhanVien == nv.tenNhanVien
-                            && it.soDienThoai == nv.soDienThoai } ?: nv
-            _selectedNhanVien.postValue(newNv) //Cập nhật LiveData selectedNhanVien
             toastEvent.postValue("Đã lưu chi tiết nhân viên")
         }
     }

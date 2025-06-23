@@ -17,7 +17,6 @@ class StaffAdapter(private val onItemClick: (NhanVien) -> Unit) : ListAdapter<Nh
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: NhanVien) = with(binding) {
-            tvMaNhanVien.text  = item.maNhanVien.toString()
             tvTenNhanVien.text = item.tenNhanVien
             tvSoDienThoai.text = item.soDienThoai
 
