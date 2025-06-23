@@ -53,12 +53,6 @@ class StaffViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            // Kiểm tra trùng tên
-            if (dao.getAll().value?.any { it.tenNhanVien == name } == true) {
-                toastEvent.postValue("Tên nhân viên đã tồn tại!")
-                return@launch
-            }
-
             val maxId = dao.getMaxMaNhanVien() ?: 0
             val newId = maxId + 1
             val nv = NhanVien(
@@ -114,6 +108,19 @@ class StaffViewModel @Inject constructor(
         val sorted = dao.getAllOnce()
         sorted.forEachIndexed { index, nv ->
             dao.update(nv.copy(maNhanVien = index + 1))
+        }
+    }
+
+    fun updateNhanVienFull(nv: NhanVien) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(nv)
+            reorderNhanVien()               // giữ ID theo thứ tự chữ cái
+            val updatedList = dao.getAllOnce()
+            val newNv = updatedList.find {
+                            it.tenNhanVien == nv.tenNhanVien
+                            && it.soDienThoai == nv.soDienThoai } ?: nv
+            _selectedNhanVien.postValue(newNv) //Cập nhật LiveData selectedNhanVien
+            toastEvent.postValue("Đã lưu chi tiết nhân viên")
         }
     }
 }
