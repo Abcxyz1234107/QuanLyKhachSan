@@ -14,7 +14,7 @@ import com.example.quanlykhachsan.databinding.ItemQlroomBinding
 data class RoomItem(val id: Int, val typeName: String)
 
 class RoomAdapter(
-    private val onClick: (RoomItem) -> Unit
+    private val onClick: (RoomItem?) -> Unit
 ) : ListAdapter<RoomItem, RoomAdapter.RoomVH>(DIFF) {
 
     private var selectedId: Int? = null
@@ -24,16 +24,20 @@ class RoomAdapter(
         fun bind(item: RoomItem) = with(b) {
             tvId.text = item.id.toString()
             tvName.text = item.typeName
-
-            // highlight nếu đang chọn
-            root.isSelected = item.id == selectedId
+            root.isSelected = item.id == selectedId // highlight nếu đang chọn
 
             root.setOnClickListener {
-                selectedId = if (selectedId == item.id) null else item.id
-                onClick(item)
+                val wasSelected = item.id == selectedId
+                selectedId = if (wasSelected) null else item.id
+                onClick(if (wasSelected) null else item)   // gửi null khi bỏ chọn
                 notifyDataSetChanged()
             }
         }
+    }
+
+    fun clearSelection() {
+        selectedId = null
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

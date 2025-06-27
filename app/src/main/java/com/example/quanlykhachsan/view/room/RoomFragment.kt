@@ -18,6 +18,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import android.view.MotionEvent
 import kotlinx.coroutines.flow.distinctUntilChanged
+import android.widget.Toast
+import kotlinx.coroutines.flow.collectLatest
+import com.example.quanlykhachsan.viewmodel.UiEvent
+import com.google.android.material.checkbox.MaterialCheckBox
+import android.widget.CompoundButton
+import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.Lifecycle
 
 @AndroidEntryPoint
 class RoomFragment : Fragment(R.layout.fragment_room) {
@@ -30,6 +38,8 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
     private lateinit var roomAdapter: RoomAdapter
     /**  Adapter cho ComboBox loại phòng  */
     private lateinit var comboAdapter: SuggestionsAdapter
+    /** adapter cho comboBox lọc */
+    private lateinit var filterAdapter: SuggestionsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentRoomBinding.bind(view)
@@ -46,12 +56,10 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
                 binding.actvRoomType.text
             )
         }
-
         // Sửa
         binding.btnEdit.setOnClickListener {
             vm.editCurrent(binding.actvRoomType.text)
         }
-
         // Xóa
         binding.btnDelete.setOnClickListener {
             vm.deleteCurrent()
@@ -83,16 +91,67 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
 
         /* ---------- RecyclerView Danh sách phòng ---------- */
         roomAdapter = RoomAdapter { item ->
-            binding.edtId.setText(item.id.toString())      // Khi chọn 1 dòng ⇒ highlight, và tự fill vào các ô input
-            // binding.actvRoomType.setText(item.typeName, false)
+            vm.onItemSelected(item)          // thông báo lên ViewModel
         }
         binding.rvRoom.apply {
             adapter = roomAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
+        // quan sát uiState để đổ dữ liệu – đồng thời xoá highlight khi state rỗng
         viewLifecycleOwner.lifecycleScope.launch {
-            vm.rooms.collectLatest { list -> roomAdapter.submitList(list) }
+            vm.uiState.collect { st ->
+                binding.edtId.setText(st.selectedId)
+                binding.actvRoomType.setText(st.selectedType, false)
+
+                if (st.selectedId.isBlank())          // state reset → bỏ chọn
+                    roomAdapter.clearSelection()
+            }
+        }
+
+        // ComboBox lọc
+        filterAdapter = SuggestionsAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            mutableListOf())
+        binding.actvFilterRoomType.setAdapter(filterAdapter)
+
+        binding.actvFilterRoomType.doAfterTextChanged { txt ->
+            vm.updateFilterQuery(txt ?: "")
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.filterSuggestions.collectLatest { list ->
+                filterAdapter.updateData(list)
+                if (binding.actvFilterRoomType.isFocused) {
+                    binding.actvFilterRoomType.showDropDown()
+                }
+            }
+        }
+
+        // CheckBox bật/tắt lọc
+        binding.cbFilter.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean -> vm.setFilterEnable(isChecked)}
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.roomsToShow.collectLatest { list -> roomAdapter.submitList(list) }
+        }
+
+        /** ------ Logic khác */
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.eventFlow.collect { ev ->
+                    if (ev is UiEvent.ShowMessage) {
+                        Snackbar.make(requireView(), ev.message, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        vm.message.observe(viewLifecycleOwner) { msg ->
+            msg?.let {
+                android.widget.Toast
+                    .makeText(requireContext(), it, android.widget.Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
 
         // Bỏ focus khi ấn ngoài EditText

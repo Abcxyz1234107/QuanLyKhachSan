@@ -27,4 +27,7 @@ interface DatPhongDao {
 
     @Query("SELECT * FROM dat_phong WHERE maPhong = :roomId")
     suspend fun getByPhongSync(roomId: Int): List<DatPhong>
+
+    @Query("SELECT COUNT(*) FROM dat_phong WHERE maPhong = :maPhong")
+    suspend fun countByRoomId(maPhong: Int): Int
 }
