@@ -43,6 +43,16 @@ class DashboardFragment : Fragment(R.layout.activity_dashboard) {
             }
         }
 
+        var infoExpanded = true
+        binding.btnToggle.setOnClickListener {
+            infoExpanded = !infoExpanded
+            binding.llThongTin.visibility =
+                if (infoExpanded) View.VISIBLE else View.GONE
+            binding.btnToggle.setImageResource(
+                if (infoExpanded) R.drawable.ic_arrow_drop_up
+                else R.drawable.ic_arrow_drop_down
+            )
+        }
     }
 
     override fun onDestroyView() {

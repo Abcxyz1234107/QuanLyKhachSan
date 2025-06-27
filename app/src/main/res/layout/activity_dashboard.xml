@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ╔══════════ TIÊU ĐỀ (NỀN XANH) ══════════╗ -->
+            <!--  TIÊU ĐỀ (NỀN XANH)  -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,12 +32,14 @@
                 android:padding="12dp">
 
                 <ImageView
+                    android:id="@+id/ivHotel"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_hotel"
                     app:tint="@android:color/white" />
 
                 <TextView
+                    android:id="@+id/tvTieuDe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -45,6 +47,19 @@
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <!-- 🔽 NÚT THU/PHÓNG -->
+                <ImageButton
+                    android:id="@+id/btnToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_arrow_drop_up"
+                    app:layout_constraintBottom_toBottomOf="@id/ivHotel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/ivHotel"
+                    android:layout_marginStart="100dp"
+                    app:tint="@android:color/white" />
             </LinearLayout>
 
             <!-- ║──────────── THÂN (NỀN TRẮNG) ────────────║ -->

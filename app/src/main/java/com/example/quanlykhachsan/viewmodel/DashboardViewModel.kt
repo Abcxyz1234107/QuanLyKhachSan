@@ -66,7 +66,7 @@ class DashboardViewModel @Inject constructor(
             val thongKeLoai = listLoai.sortedBy { it.tenLoaiPhong }.joinToString("\n") { loai ->
                 val soTrong = ui.count {
                     it.tenLoai == loai.tenLoaiPhong &&
-                            (it.trangThai == "Trống" || it.trangThai == "Đã đặt")
+                            (it.trangThai != "Đã nhận phòng")
                 }
                 "- ${loai.tenLoaiPhong}: $soTrong trống"
             }
