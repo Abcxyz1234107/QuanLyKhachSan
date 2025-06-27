@@ -33,6 +33,10 @@ class DashboardViewModel @Inject constructor(
     private val _soLuongLoaiText = MutableLiveData<String>()
     val soLuongLoaiText: LiveData<String> = _soLuongLoaiText
 
+    private val _thongTinKS = MutableLiveData<List<String>>()
+    val thongTinKS: LiveData<List<String>> = _thongTinKS
+    val lines = mutableListOf<String>()
+
     init { loadData() }
 
     private fun loadData() = viewModelScope.launch(Dispatchers.IO) {
@@ -54,9 +58,22 @@ class DashboardViewModel @Inject constructor(
         }
 
         withContext(Dispatchers.Main) {
-            _danhSachPhong.value   = ui
-            _soLuongPhongText.value = "Số lượng phòng: ${ui.size}"
-            _soLuongLoaiText.value = "Số loại phòng: ${listLoai.distinctBy { it.maLoaiPhong }.size}"
+            _danhSachPhong.value = ui
+
+            val soPhongTrong = ui.count { it.trangThai == "Trống" || it.trangThai == "Đã đặt" }
+            val infoPhong = "Tổng phòng: ${ui.size}   Trống: $soPhongTrong"
+
+            val thongKeLoai = listLoai.sortedBy { it.tenLoaiPhong }.joinToString("\n") { loai ->
+                val soTrong = ui.count {
+                    it.tenLoai == loai.tenLoaiPhong &&
+                            (it.trangThai == "Trống" || it.trangThai == "Đã đặt")
+                }
+                "- ${loai.tenLoaiPhong}: $soTrong trống"
+            }
+            lines += "Tổng phòng: ${ui.size}   Trống: $soPhongTrong"
+            lines += "Số loại phòng: ${listLoai.size}"
+            lines += thongKeLoai.split("\n")          // đã join sẵn
+            _thongTinKS.value = lines
         }
     }
 

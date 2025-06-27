@@ -109,4 +109,9 @@
         <item name="android:background">@drawable/bg_primary_button_fade</item>
     </style>
 
+    <style name="HotelInfoLine" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

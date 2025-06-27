@@ -2,6 +2,7 @@ package com.example.quanlykhachsan.view.dashboard
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,8 +30,19 @@ class DashboardFragment : Fragment(R.layout.activity_dashboard) {
 
         /* Observers */
         vm.danhSachPhong.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        vm.soLuongPhongText.observe(viewLifecycleOwner) { binding.tvSoPhong.text = it }
-        vm.soLuongLoaiText.observe(viewLifecycleOwner) { binding.tvSoLoai.text = it }
+        vm.thongTinKS.observe(viewLifecycleOwner) { lines ->
+            // clear cũ
+            binding.llThongTin.removeAllViews()
+            // thêm TextView cho từng dòng
+            lines.forEach { text ->
+                val tv = TextView(requireContext()).apply {
+                    setText(text)
+                    setTextAppearance(R.style.HotelInfoLine)
+                }
+                binding.llThongTin.addView(tv)
+            }
+        }
+
     }
 
     override fun onDestroyView() {
