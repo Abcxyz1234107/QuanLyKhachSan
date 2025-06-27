@@ -103,7 +103,7 @@
         android:id="@+id/llFilter"
         style="@style/Widget_App_BorderedContainer"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,16 +124,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilFilterName"
-            android:layout_width="170dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:hint="Tên loại phòng">
+            android:hint="Tên loại phòng"
+            app:endIconMode="dropdown_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtFilterName"
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actvFilterRoomType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
