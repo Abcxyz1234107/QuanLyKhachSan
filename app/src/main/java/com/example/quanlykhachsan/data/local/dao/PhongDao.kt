@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.quanlykhachsan.data.local.entity.Phong
 import com.example.quanlykhachsan.data.local.model.PhongWithLoaiPhong
+import com.example.quanlykhachsan.data.local.model.PhongPrice
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -42,4 +43,12 @@ interface PhongDao {
 
     @Query("SELECT COUNT(*) FROM phong WHERE maLoaiPhong = :maLoaiPhong")
     suspend fun countByLoaiPhong(maLoaiPhong: Int): Int
+
+    @Query("""
+    SELECT  p.maPhong              AS maPhong,
+            lp.gia        AS gia
+    FROM    phong p
+            JOIN loai_phong lp ON lp.maLoaiPhong = p.maLoaiPhong
+""")
+    fun getRoomPrices(): Flow<List<PhongPrice>>
 }

@@ -50,4 +50,7 @@ interface TraPhongDao {
                 "WHERE ngayThanhToan BETWEEN :startMillis AND :endMillis"
     )
     suspend fun getByDateRange(startMillis: Long,endMillis: Long): List<TraPhong>
+
+    @Query("SELECT COUNT(*) FROM tra_phong WHERE maDatPhong = :maDatPhong")
+    suspend fun countByDatPhongId(maDatPhong: Int): Int
 }

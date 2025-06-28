@@ -19,11 +19,12 @@
             android:layout_height="32dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="1dp"
-            android:textStyle="bold"
             android:contentDescription="@string/status_icon"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tvLoaiPhong"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
             app:tint="@android:color/white" />
 
         <TextView

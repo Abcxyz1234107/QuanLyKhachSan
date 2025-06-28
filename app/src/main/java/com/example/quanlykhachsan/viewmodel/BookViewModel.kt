@@ -7,6 +7,7 @@ import com.example.quanlykhachsan.data.local.entity.DatPhong
 import com.example.quanlykhachsan.data.local.entity.LoaiPhong
 import com.example.quanlykhachsan.data.local.entity.Phong
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -17,12 +18,23 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
     private val phongDao        = db.phongDao()
     private val loaiPhongDao    = db.loaiPhongDao()
     private val datPhongDao     = db.datPhongDao()
+    private val traPhongDao    = db.traPhongDao()
 
     val roomTypeNames           = loaiPhongDao.getAllNames().asLiveData()
     val bookings                = datPhongDao.getAll()          // hiển thị danh sách đặt phòng
 
     private val _message        = MutableLiveData<String>()
     val message : LiveData<String> = _message
+
+    /* Map <maPhong, tenLoaiPhong> cho UI */
+    val roomTypeByRoomId = phongDao.getRoomsWithType()           // Flow<List<PhongWithLoaiPhong>>
+        .map { list -> list.associate { it.maPhong to it.tenLoaiPhong } }
+        .asLiveData()
+
+    /* ---------- Chọn / bỏ chọn ---------- */
+    private val _selectedBooking = MutableLiveData<DatPhong?>()
+    val selectedBooking : LiveData<DatPhong?> = _selectedBooking
+    fun setSelectedBooking(dp: DatPhong?) { _selectedBooking.value = dp }
 
     // ───── API cho Fragment ─────
     fun addBooking(
@@ -49,7 +61,7 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
         val now = Date()
         val booking = DatPhong(
             maPhong         = room.maPhong,
-            tenKhach        = "Test",              // tạm cho UI demo
+            tenKhach        = "",
             soCCCD          = "",
             soDienThoai     = phone,
             ngayDatPhong    = now,
@@ -62,7 +74,6 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
         _message.postValue("Đặt phòng ${room.maPhong} thành công!")
     }
 
-    /* ───────── Nhận phòng ───────── */
     /* ───────── Nhận phòng ───────── */
     fun receiveBooking(booking: DatPhong) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -87,6 +98,44 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             datPhongDao.update(updated)
             _message.postValue("Nhận phòng thành công!")
         }
+
+    /* ---------- SỬA ---------- */
+    fun updateBookingSimple(
+        phone: String, roomTypeName: String, dateIn: Date, dateOut: Date
+    ) {
+        val current = _selectedBooking.value ?: run {
+            _message.value = "Chọn đơn cần sửa!"
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            val updated = current.copy(
+                soDienThoai   = phone,
+                ngayNhanPhong = dateIn,
+                ngayTraPhong  = dateOut
+            )
+            datPhongDao.update(updated)
+            _message.postValue("Đã cập nhật đơn #${current.maDatPhong}")
+        }
+    }
+    fun updateBookingFull(dp: DatPhong) = viewModelScope.launch(Dispatchers.IO) {
+        datPhongDao.update(dp)
+        _message.postValue("Đã lưu chi tiết đặt phòng")
+    }
+
+    /* ---------- XOÁ ---------- */
+    fun deleteBooking(dp: DatPhong) = viewModelScope.launch(Dispatchers.IO) {
+        // 1. Đếm số đơn trả phòng tham chiếu tới đơn đặt này
+        val count = traPhongDao.countByDatPhongId(dp.maDatPhong)
+        if (count > 0) {
+            _message.postValue("Không thể xoá: còn $count đơn trả phòng dùng đơn đặt phòng này")
+            return@launch
+        }
+
+        // 2. Nếu không có trả phòng nào, cho phép xóa
+        datPhongDao.delete(dp)
+        _selectedBooking.postValue(null)
+        _message.postValue("Đã xóa đơn đặt phòng!")
+    }
 
 
     /** Trả về phòng đầu tiên KHÔNG trùng lịch */
