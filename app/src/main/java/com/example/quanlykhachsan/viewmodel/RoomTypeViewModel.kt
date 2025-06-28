@@ -32,7 +32,7 @@ class RoomTypeViewModel @Inject constructor(
     val message: LiveData<String> get() = _message
 
     /* ---------- Selection ---------- */
-    private var current: LoaiPhong? = null
+    internal var current: LoaiPhong? = null
 
     init {
         listOf(sourceList, isFilterEnabled, minPrice, maxPrice).forEach {

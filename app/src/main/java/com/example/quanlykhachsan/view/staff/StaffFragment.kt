@@ -27,6 +27,7 @@ import java.util.Calendar
 import android.content.res.Resources
 import android.widget.LinearLayout
 import android.widget.NumberPicker
+import com.example.quanlykhachsan.data.local.entity.LoaiPhong
 
 @AndroidEntryPoint
 class StaffFragment : Fragment(R.layout.fragment_staff) {
@@ -90,7 +91,7 @@ class StaffFragment : Fragment(R.layout.fragment_staff) {
                 binding.edtSoDienThoai.text.toString()
             )
         }
-        binding.btnDelete?.setOnClickListener { viewModel.deleteNhanVien() }
+        binding.btnDelete?.setOnClickListener { confirmDelete(viewModel.selectedNhanVien.value!!) }
         binding.btnChiTiet?.setOnClickListener {
             val nv = viewModel.selectedNhanVien.value
             if (nv == null) {
@@ -289,5 +290,13 @@ class StaffFragment : Fragment(R.layout.fragment_staff) {
         }
 
         dialog.show()
+    }
+    private fun confirmDelete(dp: NhanVien) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Xóa nhân viên #${dp.tenNhanVien}?")
+            .setMessage("Bạn chắc chắn muốn xoá nhân viên này?")
+            .setPositiveButton("Xóa") { _, _ -> viewModel.deleteNhanVien() }
+            .setNegativeButton("Hủy", null)
+            .show()
     }
 }

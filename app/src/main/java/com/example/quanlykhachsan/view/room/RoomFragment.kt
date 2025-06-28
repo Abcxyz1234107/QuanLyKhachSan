@@ -26,6 +26,8 @@ import android.widget.CompoundButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
+import com.example.quanlykhachsan.data.local.entity.LoaiPhong
+import com.example.quanlykhachsan.data.local.entity.Phong
 
 @AndroidEntryPoint
 class RoomFragment : Fragment(R.layout.fragment_room) {
@@ -62,7 +64,7 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
         }
         // Xóa
         binding.btnDelete.setOnClickListener {
-            vm.deleteCurrent()
+            confirmDelete(vm.current!!)
         }
 
         /* ---------- ComboBox Tên loại phòng ---------- */
@@ -161,7 +163,14 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
             false
         }
     }
-
+    private fun confirmDelete(dp: Phong) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Xóa phòng #${dp.maPhong}?")
+            .setMessage("Bạn chắc chắn muốn xoá phòng này?")
+            .setPositiveButton("Xóa") { _, _ -> vm.deleteCurrent() }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

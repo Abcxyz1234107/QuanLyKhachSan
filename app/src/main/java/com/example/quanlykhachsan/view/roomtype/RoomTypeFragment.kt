@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quanlykhachsan.R
+import com.example.quanlykhachsan.data.local.entity.DatPhong
+import com.example.quanlykhachsan.data.local.entity.LoaiPhong
 import com.example.quanlykhachsan.databinding.FragmentRoomTypeBinding
 import com.example.quanlykhachsan.viewmodel.RoomTypeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +54,7 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
         binding.btnEdit.setOnClickListener {
             viewModel.editCurrent(binding.edtName.text, priceInput())
         }
-        binding.btnDelete.setOnClickListener { viewModel.deleteCurrent() }
+        binding.btnDelete.setOnClickListener { confirmDelete(viewModel.current!!) }
 
         /* ---------- Filter ---------- */
         updateFilter()
@@ -71,7 +73,14 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
         }
     }
 
-
+    private fun confirmDelete(dp: LoaiPhong) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Xóa loại phòng #${dp.tenLoaiPhong}?")
+            .setMessage("Bạn chắc chắn muốn xoá loại phòng này?")
+            .setPositiveButton("Xóa") { _, _ -> viewModel.deleteCurrent() }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
     private fun updateFilter() = viewModel.setFilter(
         binding.cbFilter.isChecked,
         binding.edtMin.text.toString().toDoubleOrNull() ?: 0.0,

@@ -42,7 +42,7 @@ class RoomViewModel @Inject constructor(
     /** ---------------------------------- Logic nút ----------------------------------*/
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-    private var current: Phong? = null
+    internal var current: Phong? = null
     // Gọi khi user chạm vào 1 dòng trong RecyclerView
     fun onItemSelected(item: RoomItem?) = viewModelScope.launch {
         if (item == null) {                         // bỏ chọn ⇒ reset

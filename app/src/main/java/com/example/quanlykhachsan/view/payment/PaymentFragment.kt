@@ -38,7 +38,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         _binding = FragmentPaymentBinding.bind(view)
 
         /* ---------- DatePicker spinner ---------- */
-        setUpDatePicker(binding.edtDateIn)
+        setUpDatePicker(binding.edtDateOut)
 
         /* RecyclerView */
         binding.rvBook.apply {
@@ -50,10 +50,10 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             if (item == null) {
                 // Bỏ chọn: clear input
                 binding.edtRoomId.setText("")
-                binding.edtDateIn.setText("")
+                binding.edtDateOut.setText("")
             } else {
                 binding.edtRoomId.setText(item.roomId.toString())
-                binding.edtDateIn.setText(item.paymentDate)
+                binding.edtDateOut.setText(item.paymentDate)
             }
         }
 
@@ -71,14 +71,14 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         binding.btnAdd.setOnClickListener {
             val roomId  = binding.edtRoomId.text.toString()
             val payType = binding.edtPaymentType.text.toString()
-            val payDate = sdf.parse(binding.edtDateIn.text.toString())
+            val payDate = sdf.parse(binding.edtDateOut.text.toString())
             if (payDate != null) {
                 viewModel.addPayment(roomId, payType, payDate)
             }
         }
 
         /* Tự động cập nhật ngày thanh toán */
-        binding.edtDateIn.setText(java.text.SimpleDateFormat("dd/MM/yyyy")
+        binding.edtDateOut.setText(java.text.SimpleDateFormat("dd/MM/yyyy")
             .format(java.util.Date()))
 
         /** ------------------------------- Hàm bỏ focus & ẩn bàn phím ------------------------------- */
@@ -86,7 +86,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             // Form Trả phòng
             binding.edtRoomId.clearFocus()
             binding.edtPaymentType.clearFocus()
-            binding.edtDateIn.clearFocus()
+            binding.edtDateOut.clearFocus()
             // Phần Lọc
             binding.edtFilterPaymentType.clearFocus()
             binding.edtFilterTotalPayment.clearFocus()
