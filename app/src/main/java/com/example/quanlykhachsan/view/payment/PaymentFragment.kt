@@ -50,16 +50,16 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             if (item == null) {
                 // Bỏ chọn: clear input
                 binding.edtRoomId.setText("")
-                binding.actvPaymentType.setText("", false)
+                binding.edtDateIn.setText("")
             } else {
                 binding.edtRoomId.setText(item.roomId.toString())
-                binding.actvPaymentType.setText(item.paymentDate, false)
+                binding.edtDateIn.setText(item.paymentDate)
             }
         }
 
         /* Dropdown hình thức thanh toán */
         val payTypes = listOf("Thẻ tín dụng", "Chuyển khoản", "Tiền mặt")
-        binding.actvPaymentType.setSimpleItems(payTypes.toTypedArray())
+        binding.edtPaymentType.setSimpleItems(payTypes.toTypedArray())
 
         // Observe data và notifications
         viewModel.payments.observe(viewLifecycleOwner) { adapter.submitList(it) }
@@ -70,7 +70,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         /* Nút thêm */
         binding.btnAdd.setOnClickListener {
             val roomId  = binding.edtRoomId.text.toString()
-            val payType = binding.actvPaymentType.text.toString()
+            val payType = binding.edtPaymentType.text.toString()
             val payDate = sdf.parse(binding.edtDateIn.text.toString())
             if (payDate != null) {
                 viewModel.addPayment(roomId, payType, payDate)
@@ -85,7 +85,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         fun clearFocusAndHideKeyboard() {
             // Form Trả phòng
             binding.edtRoomId.clearFocus()
-            binding.actvPaymentType.clearFocus()
+            binding.edtPaymentType.clearFocus()
             binding.edtDateIn.clearFocus()
             // Phần Lọc
             binding.edtFilterPaymentType.clearFocus()

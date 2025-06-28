@@ -8,6 +8,7 @@ import com.example.quanlykhachsan.data.local.dao.*
 import com.example.quanlykhachsan.data.local.entity.TraPhong
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,27 +27,31 @@ class PaymentViewModel @Inject constructor(
     private val _notification = MutableLiveData<String>()
     val notification: LiveData<String> = _notification
 
-    /** Dữ liệu hiển thị trên RecyclerView */
-    data class PaymentItem(val roomId: Int, val total: Double, val paymentDate: String)
-
-    /** LiveData để UI observe */
+    data class PaymentItem(
+        val roomId: Int,
+        val total: Double,
+        val paymentDate: String
+    )
+    private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     val payments: LiveData<List<PaymentItem>> =
         traPhongDao.getAll().switchMap { list ->
             liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
-                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                val uiList = list.map { tra ->
-                    val datPhong   = datPhongDao.getById(tra.maDatPhong)
-                    val roomId     = datPhong?.maPhong ?: -1
-                    val dateStr  = sdf.format(tra.ngayThanhToan)
-                    PaymentItem(roomId, tra.tongTien, dateStr)
+                val ui = list.map { tra ->
+                    val phong = datPhongDao.getById(tra.maDatPhong)?.maPhong ?: -1
+                    PaymentItem(
+                        roomId = phong,
+                        total = tra.tongTien,
+                        paymentDate = sdf.format(tra.ngayThanhToan)
+                    )
                 }
-                emit(uiList)
+                emit(ui)
             }
         }
 
     /** Hàm nút Thêm */
     fun addPayment(roomIdStr: String, payType: String, paymentDate: Date) =
         viewModelScope.launch(Dispatchers.IO) {
+
             val roomId = roomIdStr.toIntOrNull()
             if (roomId == null) {
                 _notification.postValue("Mã phòng không hợp lệ")
@@ -71,22 +76,22 @@ class PaymentViewModel @Inject constructor(
                 return@launch
             }
 
-            val millisPerDay = 86_400_000L
-            val days = max(
+            val dayMillis = 86_400_000L
+            val stayDays = max(
                 1,
-                ((booking.ngayTraPhong ?: Date()).time - booking.ngayNhanPhong.time) / millisPerDay
+                ((booking.ngayTraPhong ?: Date()).time - booking.ngayNhanPhong.time) / dayMillis
             )
-            val total = days * lp.gia
+            val total = stayDays * lp.gia
 
             traPhongDao.insert(
                 TraPhong(
-                    maDatPhong        = booking.maDatPhong,
-                    tongTien          = total,
+                    maDatPhong = booking.maDatPhong,
+                    tongTien = total,
                     hinhThucThanhToan = payType,
-                    ngayThanhToan     = paymentDate,
-                    ghiChu            = "$days ngày * ${lp.gia}"
+                    ngayThanhToan = paymentDate,
+                    ghiChu = "$stayDays đêm × ${lp.gia}"
                 )
             )
-            _notification.postValue("Trả phòng thành công! Tổng: ${total.toLong()} vnđ")
+            _notification.postValue("Trả phòng thành công! Tổng: ${"%,d".format(total.toLong())} ₫")
         }
 }

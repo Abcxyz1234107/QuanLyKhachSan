@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quanlykhachsan.databinding.ItemPaymentBinding
 import com.example.quanlykhachsan.viewmodel.PaymentViewModel.PaymentItem
 import java.util.*
+import kotlin.collections.get
 
 class PaymentAdapter :
     ListAdapter<PaymentItem, PaymentAdapter.PaymentVH>(diff) {
@@ -19,9 +20,10 @@ class PaymentAdapter :
     inner class PaymentVH(private val binding: ItemPaymentBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: PaymentItem, isSelected: Boolean) = with(binding) {
-            tvId.text            = item.roomId.toString()
-            tvTotalPayment.text  = "%.0f".format(item.total)
-            tvDateOut.text   = item.paymentDate
+            tvId.text           = item.roomId.toString()
+            tvDateOut.text      = item.paymentDate
+            tvTotalPayment.text = "%,d ₫".format(item.total.toLong())
+
             root.isSelected = isSelected   // bg selector đổi màu khi selected=true
         }
     }
