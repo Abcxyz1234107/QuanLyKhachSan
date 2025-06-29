@@ -252,7 +252,7 @@ class BookFragment : Fragment(R.layout.fragment_book) {
 
     private fun confirmDelete(dp: DatPhong) {
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("Xóa đơn phòng #${dp.maPhong}?")
+            .setTitle("Xóa đơn đặt phòng #${dp.maPhong}?")
             .setMessage("Bạn chắc chắn muốn xoá đơn đặt phòng này?")
             .setPositiveButton("Xóa") { _, _ -> vm.deleteBooking(dp) }
             .setNegativeButton("Hủy", null)

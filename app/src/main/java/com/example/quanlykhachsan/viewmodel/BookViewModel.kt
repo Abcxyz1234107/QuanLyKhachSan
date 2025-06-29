@@ -130,6 +130,10 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
                 _message.postValue("Không thể hủy khi đã nhận phòng!")
                 return@launch
             }
+            if (booking.tinhTrangDatPhong == "Đã trả phòng") {
+                _message.postValue("Không thể hủy khi đã trả phòng!")
+                return@launch
+            }
 
             // 2. Kiểm tra ngày hợp lệ
             val today = Date()
@@ -146,7 +150,7 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             // 3. Cập nhật trạng thái
             val updated = booking.copy(tinhTrangDatPhong = "Đã hủy đơn!")
             datPhongDao.update(updated)
-            _message.postValue("Nhận phòng thành công!")
+            _message.postValue("Hủy đơn đặt phòng thành công!")
         }
 
     /* ---------- SỬA ---------- */
@@ -180,8 +184,8 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             _message.postValue("Không thể xoá: còn $count đơn trả phòng dùng đơn đặt phòng này")
             return@launch
         }
-        if (dp.tinhTrangDatPhong == "Đang sử dụng" && count == 0) {
-            _message.postValue("Không thể xoá khi đang sử dụng mà chưa thanh toán!")
+        if (dp.tinhTrangDatPhong == "Đang sử dụng") {
+            _message.postValue("Không thể xoá khi đang sử dụng!")
             return@launch
         }
 
@@ -210,7 +214,7 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             val overlaps = datPhongDao.getByPhongSync(room.maPhong).any { b ->
                 b.tinhTrangDatPhong != "Đã hủy" &&
                         b.ngayNhanPhong <= end &&
-                        (b.ngayTraPhong ?: end) >= start
+                        (b.ngayTraPhong ?: end) > start
             }
             if (!overlaps) return room
         }
