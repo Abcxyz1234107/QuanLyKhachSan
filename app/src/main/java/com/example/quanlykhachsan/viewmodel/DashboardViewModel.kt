@@ -87,7 +87,7 @@ class DashboardViewModel @Inject constructor(
             val dat  = d.ngayDatPhong.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 
             if (tra != null && today in nhan..tra &&
-                d.tinhTrangDatPhong in listOf("Đã nhận phòng", "Đang sử dụng")
+                d.tinhTrangDatPhong in listOf("Đã nhận phòng", "Đang sử dụng", "Đã trả phòng")
             ) return "Đang sử dụng"
 
             if (tra != null && today in nhan..tra && d.tinhTrangDatPhong == "Chưa nhận phòng")
