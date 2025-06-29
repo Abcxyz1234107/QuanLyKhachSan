@@ -105,7 +105,7 @@ class BookFragment : Fragment(R.layout.fragment_book) {
                 ?: toast("Hãy chọn một đơn đặt phòng!")
         }
         /* ---------- Nút HỦY ---------- */
-        bd.btnDelete.setOnClickListener {
+        bd.btnCancel.setOnClickListener {
             vm.selectedBooking.value?.let(::confirmCancel)
                 ?: toast("Hãy chọn một đơn đặt phòng!")
         }
@@ -133,7 +133,8 @@ class BookFragment : Fragment(R.layout.fragment_book) {
                     "Vui lòng chọn ngày nhận / trả!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            vm.addBooking(phone, roomType, dateIn, dateOut)
+            val referenceRoom = vm.selectedBooking.value?.maPhong
+            vm.addBooking(phone, roomType, dateIn, dateOut, referenceRoom)
         }
 
         /* ---------- Hiển thị thông báo kết quả ---------- */

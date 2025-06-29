@@ -41,7 +41,8 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
         phone: String,
         roomTypeName: String,
         dateIn: Date,
-        dateOut: Date
+        dateOut: Date,
+        referenceRoomId: Int? = null
     ) = viewModelScope.launch(Dispatchers.IO) {
 
         val loaiPhong: LoaiPhong? = loaiPhongDao.getAllSync()
@@ -52,7 +53,12 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             return@launch
         }
 
-        val room = findAvailableRoom(loaiPhong.maLoaiPhong, dateIn, dateOut)
+        val room = findNearestAvailableRoom(
+            loaiPhong.maLoaiPhong,
+            dateIn,
+            dateOut,
+            referenceRoomId
+        )
         if (room == null) {
             _message.postValue("Không có [$roomTypeName] trống trong khoảng thời gian được chọn!")
             return@launch
@@ -157,6 +163,10 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             _message.postValue("Không thể xoá: còn $count đơn trả phòng dùng đơn đặt phòng này")
             return@launch
         }
+        if (dp.tinhTrangDatPhong == "Đang sử dụng" && count == 0) {
+            _message.postValue("Không thể xoá khi đang sử dụng mà chưa thanh toán!")
+            return@launch
+        }
 
         // 2. Nếu không có trả phòng nào, cho phép xóa
         datPhongDao.delete(dp)
@@ -165,14 +175,19 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
     }
 
 
-    /** Trả về phòng đầu tiên KHÔNG trùng lịch */
-    private suspend fun findAvailableRoom(
+    /** Trả về phòng khả dụng GẦN NHẤT với referenceRoomId (nếu có) */
+    private suspend fun findNearestAvailableRoom(
         loaiPhongId: Int,
         start: Date,
-        end:   Date
+        end: Date,
+        referenceRoomId: Int?
     ): Phong? {
         val rooms = phongDao.getAllSync()
-            .filter { it.maLoaiPhong == loaiPhongId }
+            .filter { it.maLoaiPhong == loaiPhongId }               // đúng loại phòng
+            .sortedWith(compareBy<Phong> {
+                if (referenceRoomId == null) 0 else
+                    kotlin.math.abs(it.maPhong - referenceRoomId)   // độ gần
+            }.thenBy { it.maPhong })                                // tie-break
 
         for (room in rooms) {
             val overlaps = datPhongDao.getByPhongSync(room.maPhong).any { b ->
@@ -180,7 +195,7 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
                         b.ngayNhanPhong <= end &&
                         (b.ngayTraPhong ?: end) >= start
             }
-            if (!overlaps) return room        // tìm được phòng hợp lệ
+            if (!overlaps) return room
         }
         return null
     }

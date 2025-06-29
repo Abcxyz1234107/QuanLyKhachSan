@@ -93,7 +93,7 @@ class DashboardViewModel @Inject constructor(
             if (tra != null && today in nhan..tra && d.tinhTrangDatPhong == "Chưa nhận phòng")
                 return "Đã đặt"
 
-            if (today >= dat && today < nhan) return "Đã đặt"
+            if (today >= dat && today < nhan && d.tinhTrangDatPhong != "Đã hủy đơn!") return "Đã đặt"
         }
         return "Trống"
     }
