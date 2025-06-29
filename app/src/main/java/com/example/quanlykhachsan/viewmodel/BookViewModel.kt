@@ -98,6 +98,33 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
             datPhongDao.update(updated)
             _message.postValue("Nhận phòng thành công!")
         }
+    /* ───────── Hủy đơn ───────── */
+    fun cancelBooking(booking: DatPhong) =
+        viewModelScope.launch(Dispatchers.IO) {
+
+            // 1. Kiểm tra trạng thái
+            if (booking.tinhTrangDatPhong == "Đang sử dụng") {
+                _message.postValue("Không thể hủy khi đã nhận phòng!")
+                return@launch
+            }
+
+            // 2. Kiểm tra ngày hợp lệ
+            val today = Date()
+            val cal = Calendar.getInstance().apply { time = booking.ngayNhanPhong }
+            cal.add(Calendar.DAY_OF_MONTH, -1)
+            val dayBefore = cal.time
+
+            if (today.after(dayBefore))
+            {
+                _message.postValue("Đã quá hạn hủy đơn!")
+                return@launch
+            }
+
+            // 3. Cập nhật trạng thái
+            val updated = booking.copy(tinhTrangDatPhong = "Đã hủy đơn!")
+            datPhongDao.update(updated)
+            _message.postValue("Nhận phòng thành công!")
+        }
 
     /* ---------- SỬA ---------- */
     fun updateBookingSimple(

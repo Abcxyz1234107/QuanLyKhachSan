@@ -104,6 +104,11 @@ class BookFragment : Fragment(R.layout.fragment_book) {
             vm.selectedBooking.value?.let(::confirmDelete)
                 ?: toast("Hãy chọn một đơn đặt phòng!")
         }
+        /* ---------- Nút HỦY ---------- */
+        bd.btnDelete.setOnClickListener {
+            vm.selectedBooking.value?.let(::confirmCancel)
+                ?: toast("Hãy chọn một đơn đặt phòng!")
+        }
 
         /* ---------- DatePicker spinner ---------- */
         setUpDatePicker(bd.edtDateIn)
@@ -186,6 +191,14 @@ class BookFragment : Fragment(R.layout.fragment_book) {
             .setTitle("Xóa đơn phòng #${dp.maPhong}?")
             .setMessage("Bạn chắc chắn muốn xoá đơn đặt phòng này?")
             .setPositiveButton("Xóa") { _, _ -> vm.deleteBooking(dp) }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
+    private fun confirmCancel(dp: DatPhong) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Hủy đơn phòng #${dp.maPhong}?")
+            .setMessage("Bạn chắc chắn muốn hủy đơn đặt phòng này?")
+            .setPositiveButton("Xóa") { _, _ -> vm.cancelBooking(dp) }
             .setNegativeButton("Hủy", null)
             .show()
     }
