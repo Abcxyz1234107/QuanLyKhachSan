@@ -84,6 +84,7 @@ class BookFragment : Fragment(R.layout.fragment_book) {
         bd.btnReceive.setOnClickListener {
             vm.selectedBooking.value?.let(vm::receiveBooking)
                 ?: toast("Hãy chọn một đơn đặt phòng trước!")
+            clearInputs()
         }
         /* ---------- Nút SỬA ---------- */
         bd.btnEdit.setOnClickListener {
@@ -95,7 +96,8 @@ class BookFragment : Fragment(R.layout.fragment_book) {
             val dateIn  = parseDate(bd.edtDateIn.text.toString())
             val dateOut = parseDate(bd.edtDateOut.text.toString())
             if (dateIn == null || dateOut == null) {
-                toast("Ngày nhận / trả chưa hợp lệ!")
+                Toast.makeText(requireContext(),
+                    "Vui lòng chọn ngày nhận / trả!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             vm.updateBookingSimple(
@@ -103,6 +105,7 @@ class BookFragment : Fragment(R.layout.fragment_book) {
                 bd.edtRoomType.text.toString(),
                 dateIn, dateOut
             )
+            clearInputs()
         }
         /* ---------- Nút XOÁ ---------- */
         bd.btnDelete.setOnClickListener {
@@ -116,7 +119,14 @@ class BookFragment : Fragment(R.layout.fragment_book) {
         }
 
         /* ---------- DatePicker spinner ---------- */
-        setUpDatePicker(bd.edtDateIn)
+        setUpDatePicker(bd.edtDateIn) { dateIn ->
+            Calendar.getInstance().apply {
+                time = dateIn
+                add(Calendar.DAY_OF_MONTH, 1)
+            }.time.let { nextDay ->
+                bd.edtDateOut.setText(sdf.format(nextDay))
+            }
+        }
         setUpDatePicker(bd.edtDateOut)
 
         /* ---------- Load tên loại phòng vào dropdown ---------- */
@@ -140,6 +150,7 @@ class BookFragment : Fragment(R.layout.fragment_book) {
             }
             val referenceRoom = vm.selectedBooking.value?.maPhong
             vm.addBooking(phone, roomType, dateIn, dateOut, referenceRoom)
+            clearInputs()
         }
 
         /* ---------- Hiển thị thông báo kết quả ---------- */
@@ -160,27 +171,54 @@ class BookFragment : Fragment(R.layout.fragment_book) {
         bd.edtFilterCustomerPhone.addTextChangedListener { updateFilteredList() }
     }
 
-    private fun setUpDatePicker(edt: TextInputEditText) = attachSpinner(edt, null)
+    private fun setUpDatePicker(
+        edt: TextInputEditText,
+        onDateSelected: ((Date) -> Unit)? = null
+    ) {
+        attachSpinner(edt, null, onDateSelected)
+    }
     /* —— dùng chung attachSpinner với dialog —— */
-    private fun attachSpinner(edt: TextInputEditText, init: Date?) {
+    private fun attachSpinner(
+        edt: TextInputEditText,
+        init: Date?,
+        onDateSelected: ((Date) -> Unit)? = null
+    ) {
         edt.inputType = InputType.TYPE_NULL
         edt.setOnClickListener {
             val cal = Calendar.getInstance().apply { time = init ?: Date() }
             val dlg = DatePickerDialog(
-                requireContext(), R.style.ThemeOverlay_App_DatePicker_Spinner,
-                null, cal[Calendar.YEAR], cal[Calendar.MONTH], cal[Calendar.DAY_OF_MONTH]
-            )
-            dlg.datePicker.calendarViewShown = false
+                requireContext(),
+                R.style.ThemeOverlay_App_DatePicker_Spinner,
+                null,
+                cal[Calendar.YEAR], cal[Calendar.MONTH], cal[Calendar.DAY_OF_MONTH]
+            ).apply { datePicker.calendarViewShown = false }
             dlg.setOnShowListener {
-                val sys = Resources.getSystem()
-                val day   = dlg.datePicker.findViewById<NumberPicker>(sys.getIdentifier("day","id","android"))
-                val month = dlg.datePicker.findViewById<NumberPicker>(sys.getIdentifier("month","id","android"))
-                val year  = dlg.datePicker.findViewById<NumberPicker>(sys.getIdentifier("year","id","android"))
-                (day.parent as? LinearLayout)?.apply { removeAllViews(); addView(day); addView(month); addView(year) }
-                val viMonths = arrayOf("Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12")
+                val sys   = Resources.getSystem()
+                val day   = dlg.datePicker.findViewById<NumberPicker>(
+                    sys.getIdentifier("day","id","android")
+                )
+                val month = dlg.datePicker.findViewById<NumberPicker>(
+                    sys.getIdentifier("month","id","android")
+                )
+                val year  = dlg.datePicker.findViewById<NumberPicker>(
+                    sys.getIdentifier("year","id","android")
+                )
+                (day.parent as? LinearLayout)?.apply {
+                    removeAllViews(); addView(day); addView(month); addView(year)
+                }
+                val viMonths = arrayOf(
+                    "Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6",
+                    "Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"
+                )
                 month.displayedValues = viMonths
-                fun update() { cal.set(year.value, month.value, day.value); edt.setText(sdf.format(cal.time)) }
-                listOf(day, month, year).forEach { it.setOnValueChangedListener { _, _, _ -> update() } }
+                fun update() {
+                    cal.set(year.value, month.value, day.value)
+                    edt.setText(sdf.format(cal.time))
+                    onDateSelected?.invoke(cal.time)
+                }
+                day.setOnValueChangedListener   { _,_,_ -> update() }
+                month.setOnValueChangedListener { _,_,_ -> update() }
+                year.setOnValueChangedListener  { _,_,_ -> update() }
                 update()
             }
             dlg.show()
@@ -345,5 +383,23 @@ class BookFragment : Fragment(R.layout.fragment_book) {
             }
         }
         dialog.show()
+    }
+    private fun clearInputs() {
+        // Xóa nội dung
+        bd.edtCustomerPhone.setText("")
+        bd.edtRoomType.setText("")
+        bd.edtDateIn.setText("")
+        bd.edtDateOut.setText("")
+
+        // Bỏ focus
+        listOf(
+            bd.edtCustomerPhone,
+            bd.edtRoomType,
+            bd.edtDateIn,
+            bd.edtDateOut
+        ).forEach { it.clearFocus() }
+
+        // Ẩn bàn phím nếu đang hiển thị
+        requireActivity().currentFocus?.clearFocus()
     }
 }

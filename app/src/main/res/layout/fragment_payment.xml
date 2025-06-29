@@ -192,7 +192,7 @@
         android:id="@+id/llFilter"
         style="@style/Widget_App_BorderedContainer"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
