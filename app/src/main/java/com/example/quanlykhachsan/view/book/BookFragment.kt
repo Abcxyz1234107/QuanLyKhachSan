@@ -27,6 +27,7 @@ import java.util.*
 import com.example.quanlykhachsan.databinding.DialogBookingDetailBinding
 import java.util.Locale
 import kotlinx.coroutines.flow.map
+import androidx.core.widget.addTextChangedListener
 
 private var roomTypeMap: Map<Int, String> = emptyMap()
 
@@ -38,6 +39,7 @@ class BookFragment : Fragment(R.layout.fragment_book) {
     private val bd get() = _bd!!
     private val vm by viewModels<BookViewModel>()
     private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private var fullList: List<DatPhong> = emptyList()
 
     val adapter = BookAdapter { vm.setSelectedBooking(it) }  // callback trả DatPhong? cho ViewModel
 
@@ -53,7 +55,10 @@ class BookFragment : Fragment(R.layout.fragment_book) {
         /* ---------- RecyclerView ---------- */
         bd.rvBook.layoutManager = LinearLayoutManager(requireContext())
         bd.rvBook.adapter = adapter
-        vm.bookings.observe(viewLifecycleOwner) { list -> adapter.submit(list) }
+        vm.bookings.observe(viewLifecycleOwner) { list ->
+            fullList = list
+            updateFilteredList()
+        }
 
         /* ---------- TỰ ĐIỀN form khi chọn / bỏ chọn ---------- */
         vm.selectedBooking.observe(viewLifecycleOwner) { dp ->
@@ -148,6 +153,11 @@ class BookFragment : Fragment(R.layout.fragment_book) {
             requireActivity().currentFocus?.clearFocus()
             false
         }
+
+        /* ----------  ---------- */
+        bd.cbFilter.setOnCheckedChangeListener { _, _ -> updateFilteredList() }
+        bd.edtFilterCustomerName.addTextChangedListener { updateFilteredList() }
+        bd.edtFilterCustomerPhone.addTextChangedListener { updateFilteredList() }
     }
 
     private fun setUpDatePicker(edt: TextInputEditText) = attachSpinner(edt, null)
@@ -177,6 +187,21 @@ class BookFragment : Fragment(R.layout.fragment_book) {
         }
     }
 
+    private fun updateFilteredList() {
+        val useFilter = bd.cbFilter.isChecked
+        val nameKey   = bd.edtFilterCustomerName.text.toString().trim().lowercase()
+        val phoneKey  = bd.edtFilterCustomerPhone.text.toString().trim()
+
+        val shown = if (!useFilter) {
+            fullList
+        } else {
+            fullList.filter { dp ->
+                (nameKey.isBlank()  || (dp.tenKhach ?: "").lowercase().contains(nameKey)) &&
+                        (phoneKey.isBlank() || (dp.soDienThoai ?: "").contains(phoneKey))
+            }
+        }
+        adapter.submit(shown)
+    }
 
     private fun toast(msg: String) = Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     private fun parseDate(str: String): Date? =
