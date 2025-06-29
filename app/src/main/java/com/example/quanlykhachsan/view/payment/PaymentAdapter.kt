@@ -24,7 +24,7 @@ class PaymentAdapter :
             tvDateOut.text      = item.paymentDate
             tvTotalPayment.text = "%,d ₫".format(item.total.toLong())
 
-            root.isSelected = isSelected   // bg selector đổi màu khi selected=true
+            root.isSelected     = isSelected
         }
     }
 
