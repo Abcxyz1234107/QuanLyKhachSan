@@ -45,6 +45,23 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
         referenceRoomId: Int? = null
     ) = viewModelScope.launch(Dispatchers.IO) {
 
+        val today = Date()
+        // (1) Ngày nhận phải >= hôm nay
+        if (dateIn.before(today.clearTime())) {
+            _message.postValue("Ngày nhận không được trước hôm nay!")
+            return@launch
+        }
+        // (2) Ngày trả phải > ngày nhận
+        if (dateOut.before(dateIn.clearTime().minusDays(-1))) {
+            _message.postValue("Ngày trả phải sau ngày nhận!")
+            return@launch
+        }
+        // (3) Ngày trả không được <= hôm nay
+        if (dateOut.before(today.clearTime().minusDays(-1))) {
+            _message.postValue("Ngày trả không được trước hôm nay!")
+            return@launch
+        }
+
         val loaiPhong: LoaiPhong? = loaiPhongDao.getAllSync()
             .firstOrNull { it.tenLoaiPhong == roomTypeName }
 
@@ -199,4 +216,17 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
         }
         return null
     }
+    fun Date.minusDays(days: Int): Date =
+        Calendar.getInstance().apply {
+            time = this@minusDays
+            add(Calendar.DAY_OF_MONTH, -days)
+        }.time
+    private fun Date.clearTime(): Date = Calendar.getInstance().apply {
+        time = this@clearTime
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }.time
+
 }
