@@ -2,6 +2,7 @@ package com.example.quanlykhachsan.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.quanlykhachsan.data.local.entity.DatPhong
 import com.example.quanlykhachsan.data.local.entity.NhanVien
 
 @Dao
@@ -23,4 +24,7 @@ interface NhanVienDao {
     suspend fun getById(id: Int): NhanVien?
 
     @Query("SELECT COUNT(*) FROM nhan_vien") suspend fun count(): Int
+
+    @Query("SELECT * FROM nhan_vien")
+    suspend fun getAllExport(): List<NhanVien>
 }

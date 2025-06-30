@@ -31,36 +31,13 @@ object DatabaseModule {
         @ApplicationContext context: Context
     ): AppDatabase = AppDatabase.getDatabase(context)
 
-    @Provides
-    fun providePhongDao(db: AppDatabase): PhongDao =
-        db.phongDao()
+    @Provides fun providePhongDao(db: AppDatabase): PhongDao = db.phongDao()
+    @Provides fun provideLoaiPhongDao(db: AppDatabase): LoaiPhongDao = db.loaiPhongDao()
+    @Provides fun provideNhanVienDao(db: AppDatabase): NhanVienDao = db.nhanVienDao()
+    @Provides fun provideDatPhongDao(db: AppDatabase): DatPhongDao = db.datPhongDao()
+    @Provides fun provideTraPhongDao(db: AppDatabase): TraPhongDao = db.traPhongDao()
+    @Provides fun provideChartRepository(dao: TraPhongDao): ChartRepository = ChartRepositoryImpl(dao)
 
-    @Provides
-    fun provideLoaiPhongDao(db: AppDatabase): LoaiPhongDao =
-        db.loaiPhongDao()
-
-    @Provides
-    @Singleton
-    fun providePhongRepository(dao: PhongDao): PhongRepository =
-            PhongRepositoryImpl(dao)
-
-    @Provides
-    @Singleton
-    fun provideLoaiPhongRepository(dao: LoaiPhongDao):
-            LoaiPhongRepository = LoaiPhongRepositoryImpl(dao)
-
-    @Provides
-    fun provideNhanVienDao(db: AppDatabase): NhanVienDao = db.nhanVienDao()
-
-    @Provides
-    fun provideDatPhongDao(db: AppDatabase): DatPhongDao =
-        db.datPhongDao()
-
-    @Provides
-    fun provideTraPhongDao(db: AppDatabase): TraPhongDao =
-        db.traPhongDao()
-
-    @Provides
-    fun provideChartRepository(dao: TraPhongDao): ChartRepository =
-        ChartRepositoryImpl(dao)
+    @Provides @Singleton fun providePhongRepository(dao: PhongDao): PhongRepository = PhongRepositoryImpl(dao)
+    @Provides @Singleton fun provideLoaiPhongRepository(dao: LoaiPhongDao):LoaiPhongRepository = LoaiPhongRepositoryImpl(dao)
 }

@@ -20,6 +20,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.content.Intent
+import android.provider.DocumentsContract
+import android.app.Activity
+import android.net.Uri
+import android.util.Log
+import android.view.MenuItem
+import android.widget.Button
+import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.CheckBox
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.example.quanlykhachsan.util.ExportUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -28,6 +45,92 @@ class MainActivity : AppCompatActivity() {
     private var isDropDownVisible = false
     private lateinit var toolbar: MaterialToolbar
     private lateinit var drawer: DrawerLayout
+
+    private var pendingWorkbook: XSSFWorkbook? = null
+
+    private val createFile = registerForActivityResult(
+        ActivityResultContracts.CreateDocument(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+    ) { uri: Uri? ->
+        uri ?: return@registerForActivityResult
+        pendingWorkbook?.let { wb ->
+            // Chạy trên IO để tránh block UI
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    contentResolver.openOutputStream(uri)?.use {
+                        ExportUtils.writeWorkbook(wb, it)
+                    }
+                    // thông báo thành công
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity, "Xuất Excel thành công", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Lỗi ghi Excel", e)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity,
+                            "Lỗi khi ghi file: ${e.message}",
+                            Toast.LENGTH_LONG).show()
+                    }
+                } finally {
+                    pendingWorkbook = null
+                }
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.top_bar_menu, menu); return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_export) {
+            showExportDialog(); return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+    /*──────── hộp thoại chọn bảng ────────*/
+    private fun showExportDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_export, null)
+
+        val cbDatPhong  = view.findViewById<CheckBox>(R.id.cbDatPhong)
+        val cbTraPhong  = view.findViewById<CheckBox>(R.id.cbTraPhong)
+        val cbPhong     = view.findViewById<CheckBox>(R.id.cbPhong)
+        val cbLoaiPhong = view.findViewById<CheckBox>(R.id.cbLoaiPhong)
+        val cbNhanVien  = view.findViewById<CheckBox>(R.id.cbNhanVien)
+
+        val dlg = MaterialAlertDialogBuilder(this)
+            .setTitle("Chọn bảng cần xuất")
+            .setView(view)
+            .create()
+
+        view.findViewById<Button>(R.id.btnCancel).setOnClickListener { dlg.dismiss() }
+
+        view.findViewById<Button>(R.id.btnSave).setOnClickListener {
+
+            val tables = mutableListOf<String>()
+            if (cbDatPhong.isChecked)  tables += "DatPhong"
+            if (cbTraPhong.isChecked)  tables += "TraPhong"
+            if (cbPhong.isChecked)     tables += "Phong"
+            if (cbLoaiPhong.isChecked) tables += "LoaiPhong"
+            if (cbNhanVien.isChecked)  tables += "NhanVien"
+
+            if (tables.isNotEmpty()) {
+                lifecycleScope.launch {
+                    /* 1. Tạo workbook */
+                    pendingWorkbook = viewModel.buildWorkbookSuspend(tables)
+
+                    /* 2. Gọi SAF => khi user chọn xong callback ghi file */
+                    createFile.launch("QuanLyKhachSan_${System.currentTimeMillis()}.xlsx")
+                }
+            }
+            dlg.dismiss()
+        }
+        dlg.show()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,11 +220,6 @@ class MainActivity : AppCompatActivity() {
             onNavItemSelected(R.id.navDashboard)
         }
         findViewById<MaterialButton>(R.id.navDashboard)?.performClick()
-    }
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.top_bar_menu, menu)
-        return true
     }
 
     private fun onNavItemSelected(viewId: Int) {

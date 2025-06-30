@@ -49,6 +49,10 @@ repositories {
 
 dependencies {
     implementation("org.apache.poi:poi-ooxml:5.2.5") //Thư viện tạo Excel
+    implementation("org.apache.xmlbeans:xmlbeans:5.1.1")
+    implementation("org.apache.commons:commons-collections4:4.4")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")

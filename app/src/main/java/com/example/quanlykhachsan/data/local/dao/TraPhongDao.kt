@@ -2,6 +2,7 @@ package com.example.quanlykhachsan.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.quanlykhachsan.data.local.entity.DatPhong
 import com.example.quanlykhachsan.data.local.entity.TraPhong
 import com.example.quanlykhachsan.data.local.model.MonthRevenue
 import com.example.quanlykhachsan.data.local.model.RoomTypeRevenue
@@ -72,4 +73,7 @@ interface TraPhongDao {
         startMs: Long,
         endMs: Long
     ): List<RoomTypeRevenue>
+
+    @Query("SELECT * FROM tra_phong")
+    suspend fun getAllExport(): List<TraPhong>
 }

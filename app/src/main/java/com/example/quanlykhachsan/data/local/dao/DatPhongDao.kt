@@ -16,7 +16,7 @@ interface DatPhongDao {
     @Delete
     suspend fun delete(datPhong: DatPhong)
 
-    @Query("SELECT * FROM dat_phong ORDER BY ngayDatPhong DESC")
+    @Query("SELECT * FROM dat_phong ORDER BY ngayNhanPhong DESC")
     fun getAll(): LiveData<List<DatPhong>>
 
     @Query("SELECT * FROM dat_phong WHERE maDatPhong = :id")
@@ -30,4 +30,7 @@ interface DatPhongDao {
 
     @Query("SELECT COUNT(*) FROM dat_phong WHERE maPhong = :maPhong")
     suspend fun countByRoomId(maPhong: Int): Int
+
+    @Query("SELECT * FROM dat_phong")
+    suspend fun getAllExport(): List<DatPhong>
 }

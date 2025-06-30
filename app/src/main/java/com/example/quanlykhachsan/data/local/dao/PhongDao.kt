@@ -2,6 +2,7 @@ package com.example.quanlykhachsan.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.quanlykhachsan.data.local.entity.DatPhong
 import com.example.quanlykhachsan.data.local.entity.Phong
 import com.example.quanlykhachsan.data.local.model.PhongWithLoaiPhong
 import com.example.quanlykhachsan.data.local.model.PhongPrice
@@ -51,4 +52,7 @@ interface PhongDao {
             JOIN loai_phong lp ON lp.maLoaiPhong = p.maLoaiPhong
 """)
     fun getRoomPrices(): Flow<List<PhongPrice>>
+
+    @Query("SELECT * FROM phong")
+    suspend fun getAllExport(): List<Phong>
 }
