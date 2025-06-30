@@ -44,18 +44,34 @@ class PaymentViewModel @Inject constructor(
 
     private val _suggestedDate = MutableLiveData<String>()
     val suggestedDate: LiveData<String> = _suggestedDate
-    fun loadLatestCheckoutDate(roomIdStr: String) = viewModelScope.launch(Dispatchers.IO) {
-        val roomId = roomIdStr.toIntOrNull() ?: run {
-            _suggestedDate.postValue("")
-            return@launch
-        }
-        val booking = datPhongDao.getByPhongSync(roomId)
-            .sortedByDescending { it.ngayNhanPhong }
-            .firstOrNull()
 
-        val dateStr = booking?.ngayTraPhong?.let { sdf.format(it) } ?: ""
-        _suggestedDate.postValue(dateStr)
-    }
+    fun loadCheckoutDate(roomIdStr: String?, bookingIdStr: String?) =
+        viewModelScope.launch(Dispatchers.IO) {
+
+            /* ----- Parse các tham số ----- */
+            val roomId    = roomIdStr?.toIntOrNull()
+            val bookingId = bookingIdStr?.toIntOrNull()
+
+            if (roomId == null) {
+                _suggestedDate.postValue("")
+                return@launch
+            }
+
+            /* ----- Ưu tiên tìm đúng mã đặt phòng nếu có ----- */
+            val booking = when (bookingId) {
+                null -> datPhongDao.getByPhongSync(roomId)
+                    .sortedByDescending { it.ngayNhanPhong }
+                    .firstOrNull()
+                else -> datPhongDao.getById(bookingId)
+                    ?.takeIf { it.maPhong == roomId }
+            }
+
+            val dateStr = booking?.ngayTraPhong
+                ?.let { sdf.format(it) }
+                ?: ""
+
+            _suggestedDate.postValue(dateStr)
+        }
 
     val payments : LiveData<List<PaymentItem>> =
         traPhongDao.getAll().switchMap { list ->
@@ -91,50 +107,68 @@ class PaymentViewModel @Inject constructor(
     }.time
 
     /** ---------- Thêm ---------- */
-    fun addPayment(roomIdStr:String, payType:String, payDate:Date) =
+    fun addPayment(roomIdStr: String, payType: String, payDate: Date) =
         viewModelScope.launch(Dispatchers.IO) {
 
             /* ---- Validate mã phòng ---- */
             val roomId = roomIdStr.toIntOrNull()
-            if (roomId == null) { _notification.postValue("Mã phòng không hợp lệ"); return@launch }
-
-            /* ---- Lấy đơn đặt phòng MỚI NHẤT của phòng này ---- */
-            val booking = datPhongDao.getByPhongSync(roomId)
-                .sortedByDescending { it.ngayNhanPhong }
-                .firstOrNull()
-            if (booking == null) { _notification.postValue("Không tìm thấy đặt phòng cho phòng $roomId"); return@launch }
-
-            /* ---- Khớp ngày trả phòng ---- */
-            val ngayTraPhong = booking.ngayTraPhong?.clearTime()
-            if (ngayTraPhong == null || ngayTraPhong != payDate.clearTime()) {
-                _notification.postValue("Ngày trả phòng không khớp với đơn đặt phòng!")
+            if (roomId == null) {
+                _notification.postValue("Mã phòng không hợp lệ")
                 return@launch
             }
 
-            if (booking.tinhTrangDatPhong == "Chưa nhận phòng") {
-                _notification.postValue("Không thể trả phòng! Khách hàng chưa nhận phòng!")
-                return@launch
-            }
-            if (booking.tinhTrangDatPhong == "Đã trả phòng") {
-                _notification.postValue("Đơn này đã trả phòng rồi!")
-                return@launch
-            }
-            if (booking.tinhTrangDatPhong == "Đã hủy đơn!") {
-                _notification.postValue("Đơn này đã bị hủy!")
+            /* ---- Lấy TẤT CẢ đơn đặt của phòng, mới nhất trước ---- */
+            val allBookings = datPhongDao.getByPhongSync(roomId)
+                .sortedByDescending { it.ngayTraPhong }
+
+            if (allBookings.isEmpty()) {
+                _notification.postValue("Không tìm thấy đặt phòng cho phòng $roomId")
                 return@launch
             }
 
-            /* ---- Tránh trùng khoá (phòng + ngày trả đã tồn tại) ---- */
+            /* ---- Tìm đơn có ngày trả TRÙNG với ngày người dùng chọn ---- */
+            val booking = allBookings.firstOrNull { bk ->
+                val ngayTra = bk.ngayTraPhong?.clearTime()
+                ngayTra != null && ngayTra == payDate.clearTime()
+            }
+
+            if (booking == null) {
+                _notification.postValue("Không có đơn đặt phòng nào khớp ngày trả ${sdf.format(payDate)}")
+                return@launch
+            }
+
+            /* ---- Kiểm tra tình trạng đơn ---- */
+            when (booking.tinhTrangDatPhong) {
+                "Chưa nhận phòng" -> {
+                    _notification.postValue("Không thể trả phòng! Khách chưa nhận phòng!")
+                    return@launch
+                }
+                "Đã trả phòng" -> {
+                    _notification.postValue("Đơn này đã trả phòng rồi!")
+                    return@launch
+                }
+                "Đã hủy đơn!" -> {
+                    _notification.postValue("Đơn này đã bị hủy!")
+                    return@launch
+                }
+            }
+
+            /* ---- Tránh trùng (cùng mã đặt phòng) ---- */
             if (traPhongDao.countByDatPhongId(booking.maDatPhong) > 0) {
                 _notification.postValue("Đơn trả phòng này đã tồn tại!")
                 return@launch
             }
 
             /* ---- Tính tiền ---- */
-            val loaiPhong = phongDao.getById(roomId)?.let { lp -> loaiPhongDao.getById(lp.maLoaiPhong) }
-            if (loaiPhong == null) { _notification.postValue("Lỗi tra cứu loại phòng!"); return@launch }
+            val loaiPhong = phongDao.getById(roomId)
+                ?.let { lp -> loaiPhongDao.getById(lp.maLoaiPhong) }
+                ?: run {
+                    _notification.postValue("Lỗi tra cứu loại phòng!")
+                    return@launch
+                }
 
-            val stayDays = max(1,
+            val stayDays = max(
+                1,
                 ((booking.ngayTraPhong?.time ?: payDate.time) - booking.ngayNhanPhong.time) / 86_400_000L
             )
             val total = stayDays * loaiPhong.gia
@@ -149,7 +183,9 @@ class PaymentViewModel @Inject constructor(
                     ghiChu            = "$stayDays ngày × ${loaiPhong.gia}"
                 )
             )
-            _notification.postValue("Thêm đơn trả phòng thành công! Tổng: ${"%,d".format(total.toLong())} ₫")
+            _notification.postValue(
+                "Thêm đơn trả phòng thành công! Tổng: ${"%,d".format(total.toLong())} ₫"
+            )
         }
 
     /** ---------- Sửa ---------- */

@@ -234,7 +234,7 @@
             android:layout_width="129dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:hint="SĐT">
+            android:hint="Mã phòng">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtFilterTotalPayment"

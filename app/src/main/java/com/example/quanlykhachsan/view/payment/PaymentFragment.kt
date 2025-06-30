@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +37,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     private val viewModel by viewModels<PaymentViewModel>()
     private val adapter  = PaymentAdapter()
     private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private var originList: List<PaymentViewModel.PaymentItem> = emptyList()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +51,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         binding.edtRoomId.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val idStr = binding.edtRoomId.text.toString()
-                viewModel.loadLatestCheckoutDate(idStr)
+                viewModel.loadCheckoutDate(idStr, bookingIdStr = null)
             }
         }
 
@@ -68,7 +70,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             else {
                 binding.edtRoomId.setText(item.roomId.toString())
                 binding.edtDateOut.setText(item.paymentDate)
-                viewModel.loadLatestCheckoutDate(item.roomId.toString())
+                viewModel.loadCheckoutDate(item.roomId.toString(), item.maDatPhong.toString())
                 binding.edtPaymentType.setText(item.paymentType, false)
             }
             viewModel.setSelected(item)
@@ -77,6 +79,16 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         /* hình thức thanh toán */
         val payTypes = listOf("Thẻ tín dụng", "Chuyển khoản", "Tiền mặt")
         binding.edtPaymentType.setSimpleItems(payTypes.toTypedArray())
+
+        /* Lọc */
+        binding.edtFilterPaymentType.setSimpleItems(payTypes.toTypedArray())
+        viewModel.payments.observe(viewLifecycleOwner) { list ->
+            originList = list
+            applyFilter()
+        }
+        binding.cbFilter.setOnCheckedChangeListener { _, _ -> applyFilter() }
+        binding.edtFilterPaymentType.doOnTextChanged { _, _, _, _ -> applyFilter() }
+        binding.edtFilterTotalPayment.doOnTextChanged  { _, _, _, _ -> applyFilter() }
 
         // Observe data và notifications
         viewModel.payments.observe(viewLifecycleOwner) { adapter.submitList(it) }
@@ -291,5 +303,17 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             .setPositiveButton("Xóa") { _, _ -> viewModel.cancelPayment() }
             .setNegativeButton("Hủy", null)
             .show()
+    }
+    private fun applyFilter() {
+        var data = originList
+        if (binding.cbFilter.isChecked) {
+            val type = binding.edtFilterPaymentType.text.toString().trim()
+            if (type.isNotEmpty())
+                data = data.filter { it.paymentType.contains(type, ignoreCase = true) }
+
+            val minTotal = binding.edtFilterTotalPayment.text.toString().toIntOrNull()
+            if (minTotal != null) data = data.filter { it.roomId == minTotal }
+        }
+        adapter.submitList(data)
     }
 }
