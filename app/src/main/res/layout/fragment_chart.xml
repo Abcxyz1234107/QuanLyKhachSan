@@ -7,43 +7,116 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
-        <!-- ── Chọn năm ── -->
+        <!-- ▼ Spinner chọn năm (Item 1) -->
         <Spinner
             android:id="@+id/spYear"
-            android:layout_width="110dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ── 4 biểu đồ: Q1-Q4 ── -->
+        <!-- ─────────── Guideline chia màn thành 2×2 ─────────── -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.37" />
+
+        <!-- ─────────── Row 1: Quý I – Quý II ─────────── -->
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartQ1"
             style="@style/QuarterChartStyle"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toTopOf="@id/guidelineH"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@id/guidelineV"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spYear" />
+
+        <TextView
+            android:id="@+id/tvQ1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quý I"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/pieChartQ1"
+            app:layout_constraintStart_toStartOf="@id/pieChartQ1"
+            app:layout_constraintEnd_toEndOf="@id/pieChartQ1"
+            android:layout_marginTop="4dp" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartQ2"
             style="@style/QuarterChartStyle"
-            app:layout_constraintTop_toBottomOf="@id/pieChartQ1"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="200dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/guidelineV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spYear"
+            app:layout_constraintBottom_toTopOf="@id/guidelineH" />
 
+        <TextView
+            android:id="@+id/tvQ2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quý II"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/pieChartQ2"
+            app:layout_constraintStart_toStartOf="@id/pieChartQ2"
+            app:layout_constraintEnd_toEndOf="@id/pieChartQ2"
+            android:layout_marginTop="4dp" />
+
+        <!-- ─────────── Row 2: Quý III – Quý IV ─────────── -->
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartQ3"
             style="@style/QuarterChartStyle"
-            app:layout_constraintStart_toEndOf="@+id/pieChartQ1"
-            app:layout_constraintTop_toBottomOf="@+id/spYear" />
+            android:layout_height="200dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guidelineV"
+            app:layout_constraintTop_toTopOf="@id/guidelineH"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tvQ3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quý III"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/pieChartQ3"
+            app:layout_constraintStart_toStartOf="@id/pieChartQ3"
+            app:layout_constraintEnd_toEndOf="@id/pieChartQ3"
+            android:layout_marginTop="4dp" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartQ4"
             style="@style/QuarterChartStyle"
-            app:layout_constraintStart_toEndOf="@+id/pieChartQ2"
-            app:layout_constraintTop_toBottomOf="@id/pieChartQ3" />
+            android:layout_height="200dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/guidelineV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guidelineH"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
+        <TextView
+            android:id="@+id/tvQ4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quý IV"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/pieChartQ4"
+            app:layout_constraintStart_toStartOf="@id/pieChartQ4"
+            app:layout_constraintEnd_toEndOf="@id/pieChartQ4"
+            android:layout_marginTop="4dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

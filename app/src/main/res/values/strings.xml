@@ -16,4 +16,5 @@
     <string name="tenloaiphong">Tên loại phòng</string>
 
     <string name="status_icon">Biểu tượng trạng thái phòng</string>
+    <string name="no_data">Không có dữ liệu</string>
 </resources>

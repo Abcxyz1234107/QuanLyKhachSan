@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.quanlykhachsan.data.local.entity.TraPhong
 import com.example.quanlykhachsan.data.local.model.MonthRevenue
+import com.example.quanlykhachsan.data.local.model.RoomTypeRevenue
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.Instant
@@ -53,4 +54,22 @@ interface TraPhongDao {
 
     @Query("SELECT COUNT(*) FROM tra_phong WHERE maDatPhong = :maDatPhong")
     suspend fun countByDatPhongId(maDatPhong: Int): Int
+
+    @Query(
+        """
+    SELECT lp.tenLoaiPhong        AS tenLoaiPhong,
+           SUM(tp.tongTien)       AS total
+    FROM tra_phong tp
+    JOIN dat_phong  dp ON dp.maDatPhong = tp.maDatPhong
+    JOIN phong      p  ON p.maPhong     = dp.maPhong
+    JOIN loai_phong lp ON lp.maLoaiPhong = p.maLoaiPhong
+    WHERE tp.ngayThanhToan BETWEEN :startMs AND :endMs
+    GROUP BY lp.tenLoaiPhong
+    ORDER BY total DESC
+    """
+    )
+    suspend fun getRevenueByRoomTypeRange(
+        startMs: Long,
+        endMs: Long
+    ): List<RoomTypeRevenue>
 }

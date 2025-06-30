@@ -1,10 +1,12 @@
 package com.example.quanlykhachsan.viewmodel
 
 import androidx.lifecycle.*
+import com.example.quanlykhachsan.data.local.model.RoomTypeRevenue
 import com.example.quanlykhachsan.data.repository.chart.ChartRepository
 import com.github.mikephil.charting.data.PieEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
@@ -38,6 +40,17 @@ class ChartViewModel @Inject constructor(
             }
         }
 
+    /** Bảng doanh thu theo loại phòng của lát đang chọn */
+    private val _roomTypeRevenue = MutableLiveData<List<RoomTypeRevenue>>()
+    val roomTypeRevenue: LiveData<List<RoomTypeRevenue>> = _roomTypeRevenue
+
+    fun onSliceSelected(year: Int, month: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val list = repo.getRoomTypeRevenue(year, month)
+            _roomTypeRevenue.postValue(list)
+        }
+    }
+
     /* ───── Khác ───── */
     val valueTextSize = MutableLiveData(12f)
     val sliceColors   = MutableLiveData<List<Int>>()
@@ -45,4 +58,6 @@ class ChartViewModel @Inject constructor(
     fun setValueTextSize(sizeDp: Float) = valueTextSize.postValue(sizeDp)
     fun setSliceColors(colors: List<Int>) = sliceColors.postValue(colors)
     fun setYear(year: Int) { if (year != selectedYear.value) selectedYear.value = year }
+
+    fun clearSlice() = _roomTypeRevenue.postValue(emptyList())
 }

@@ -16,18 +16,24 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.util.Locale
+import com.github.mikephil.charting.data.Entry
 
 @AndroidEntryPoint
 class ChartFragment : Fragment(R.layout.fragment_chart) {
 
     private val viewModel: ChartViewModel by viewModels()
     private lateinit var binding: FragmentChartBinding
-    private val vnCurrency: NumberFormat =
-        NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+    private val vnCurrency: NumberFormat = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+    private lateinit var adapter: ChartAdapter
+    private var selectedEntry: PieEntry? = null
+    private var lastSelectedChart: com.github.mikephil.charting.charts.PieChart? = null
+
 
     // ───────── onViewCreated ─────────
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +44,9 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         configPieCharts()
         observeChartConfig()
         observeQuarterData()
+
+        setupRecycler()
+        observeRoomTypeRevenue()
     }
 
     // -------------------- cấu hình 4 PieChart --------------------
@@ -52,6 +61,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
                 isDrawHoleEnabled = false    // bỏ vòng trong ở tâm
                 holeRadius = 0f
                 transparentCircleRadius = 0f
+                chart.marker = RoomRevenueMarkerView(requireContext())
                 setEntryLabelTextSize(viewModel.valueTextSize.value ?: 12f)
                 legend.isEnabled = false
             }
@@ -90,6 +100,13 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
 
     // Lắng nghe LiveData PieEntry từ ViewModel
     private fun observeQuarterData() {
+        val quarterLabels = mapOf(
+            1 to binding.tvQ1,
+            2 to binding.tvQ2,
+            3 to binding.tvQ3,
+            4 to binding.tvQ4
+        )
+
         viewModel.quarterlyEntries.observe(viewLifecycleOwner) { map ->
             val defaultColors = listOf(
                 Color.parseColor("#2196F3"), Color.parseColor("#4CAF50"),
@@ -98,30 +115,66 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
             )
             val sliceColors = viewModel.sliceColors.value ?: defaultColors
 
-            // Helper để tạo PieData
             fun toPieData(entries: List<PieEntry>) = PieData(
                 PieDataSet(entries, "").apply {
                     colors = sliceColors
                     valueFormatter = object : ValueFormatter() {
-                        override fun getPieLabel(value: Float, entry: PieEntry?): String =
-                            vnCurrency.format(value.toLong())
+                        override fun getPieLabel(v: Float, e: PieEntry?) =
+                            vnCurrency.format(v.toLong())
                     }
                     valueTextSize = viewModel.valueTextSize.value ?: 12f
                 })
 
-            // Gán dữ liệu cho từng chart; ẩn chart nếu quý không có
             listOf(
                 binding.pieChartQ1 to 1,
                 binding.pieChartQ2 to 2,
                 binding.pieChartQ3 to 3,
                 binding.pieChartQ4 to 4
-            ).forEach { (chart, qIndex) ->
-                map[qIndex]?.let { entries ->
+            ).forEach { (chart, q) ->
+                map[q]?.let { entries ->
                     chart.visibility = View.VISIBLE
+                    quarterLabels[q]?.visibility = View.VISIBLE
+
                     chart.data = toPieData(entries)
+                    chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                        override fun onValueSelected(e: Entry?, h: Highlight?) {
+                            val entry = e as? PieEntry ?: return
+                            if (selectedEntry == entry) return
+                            selectedEntry = entry
+                            lastSelectedChart = chart
+
+                            val month = entry.label.substringAfter(' ').trim().toIntOrNull() ?: return
+                            val year  = binding.spYear.selectedItem as Int
+                            viewModel.onSliceSelected(year, month)
+                        }
+                        override fun onNothingSelected() {
+                            selectedEntry = null
+                            lastSelectedChart = null
+                            viewModel.clearSlice()
+                        }
+                    })
                     chart.invalidate()
-                } ?: run { chart.visibility = View.GONE }
+                } ?: run {
+                    chart.visibility = View.GONE
+                    quarterLabels[q]?.visibility = View.GONE
+                }
             }
+        }
+    }
+
+    private fun setupRecycler() {
+        adapter = ChartAdapter()
+    }
+
+    private fun observeRoomTypeRevenue() {
+        viewModel.roomTypeRevenue.observe(viewLifecycleOwner) { list ->
+            lastSelectedChart?.let { chart ->
+                (chart.marker as? RoomRevenueMarkerView)?.also { marker ->
+                    marker.setData(list)
+                    chart.highlightValues(chart.highlighted)   // refresh marker
+                }
+            }
+            if (!list.isEmpty()) adapter.submit(list)
         }
     }
 }
