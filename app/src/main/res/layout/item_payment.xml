@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:background="@drawable/bg_room_type_item"
     android:layout_width="match_parent"
@@ -7,29 +8,29 @@
     android:gravity="center_vertical"
     android:paddingHorizontal="12dp">
 
-    <TextView
+    <com.example.quanlykhachsan.view.custom.AlignableTextView
         android:id="@+id/tvId"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:hint="room id"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
+        app:alignFactor="0.3"
         />
 
-    <TextView
+    <com.example.quanlykhachsan.view.custom.AlignableTextView
         android:id="@+id/tvTotalPayment"
         android:layout_width="0dp"
         android:layout_weight="3"
         android:hint="total payment"
-        android:textAlignment="center"
+        app:alignFactor="0.25"
         android:layout_height="wrap_content"/>
 
-    <TextView
+    <com.example.quanlykhachsan.view.custom.AlignableTextView
         android:id="@+id/tvDateOut"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:hint="payment date"
-        android:textAlignment="center"
+        app:alignFactor="0.15"
         android:layout_height="wrap_content"
         />
 </LinearLayout>

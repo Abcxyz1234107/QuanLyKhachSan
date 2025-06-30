@@ -12,6 +12,7 @@
 
         <!-- ▼ Spinner chọn năm (Item 1) -->
         <Spinner
+            style="@style/Widget_App_BorderedContainer"
             android:id="@+id/spYear"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
