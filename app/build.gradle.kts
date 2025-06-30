@@ -48,6 +48,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.apache.poi:poi-ooxml:5.2.5") //Thư viện tạo Excel
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
