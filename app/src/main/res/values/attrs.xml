@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="AlignableTextView">
+        <attr name="alignFactor" format="float"/>
+    </declare-styleable>
+</resources>
