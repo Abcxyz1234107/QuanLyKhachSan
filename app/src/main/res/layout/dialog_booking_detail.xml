@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:theme="@style/ThemeOverlay.App.TealPrimary"
     android:padding="16dp">
 
     <LinearLayout
@@ -39,6 +40,7 @@
 
         <!-- ───── tên khách ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -51,6 +53,7 @@
 
         <!-- ───── số CCCD ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -64,6 +67,7 @@
 
         <!-- ───── số điện thoại ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -77,6 +81,7 @@
 
         <!-- ───── ngày đặt ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -93,6 +98,7 @@
 
         <!-- ───── ngày nhận ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -103,11 +109,13 @@
                 android:layout_height="wrap_content"
                 android:focusable="false"
                 android:clickable="true"
+                android:enabled="false"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- ───── ngày trả ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -118,11 +126,13 @@
                 android:layout_height="wrap_content"
                 android:focusable="false"
                 android:clickable="true"
+                android:enabled="false"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- ───── tình trạng ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -138,6 +148,7 @@
 
         <!-- ───── ghi chú ───── -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

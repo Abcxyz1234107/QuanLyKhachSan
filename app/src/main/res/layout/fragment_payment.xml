@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/ThemeOverlay.App.TealPrimary"
     >
 
     <!-- ─────────── Khối nhập liệu (2 dòng) ─────────── -->
@@ -34,6 +35,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilRoomId"
+                    style="@style/Widget.App.TextInputLayout.Teal"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:hint="Mã phòng">
@@ -75,6 +77,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilDateIn"
+                    style="@style/Widget.App.TextInputLayout.Teal"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:hint="Ngày trả phòng">
@@ -91,6 +94,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilDateOut"
+                    style="@style/Widget.App.TextInputLayout.Teal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -202,6 +206,7 @@
 
         <CheckBox
             android:id="@+id/cbFilter"
+            app:buttonTint="@color/checkbox_teal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -231,6 +236,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilFilterTotalPayment"
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="129dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

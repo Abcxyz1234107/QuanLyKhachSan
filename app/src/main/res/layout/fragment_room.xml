@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/ThemeOverlay.App.TealPrimary"
     >
 
     <!-- Khối nhập liệu -->
@@ -30,6 +31,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilId"
+                style="@style/Widget.App.TextInputLayout.Teal"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:hint="Mã phòng (số)">
@@ -114,6 +116,7 @@
 
         <CheckBox
             android:id="@+id/cbFilter"
+            app:buttonTint="@color/checkbox_teal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

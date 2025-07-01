@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:theme="@style/ThemeOverlay.App.TealPrimary"
     android:padding="16dp">
 
     <LinearLayout
@@ -27,6 +28,7 @@
 
         <!-- Tên -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Tên nhân viên"
@@ -40,6 +42,7 @@
 
         <!-- SĐT -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Số điện thoại"
@@ -53,6 +56,7 @@
 
         <!-- Chức vụ -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Chức vụ"
@@ -66,6 +70,7 @@
 
         <!-- Lương cơ bản -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Lương cơ bản"
@@ -80,6 +85,7 @@
 
         <!-- Lịch làm việc -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Lịch làm việc"
@@ -93,6 +99,7 @@
 
         <!-- Ngày vào làm -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Ngày vào làm"

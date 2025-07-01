@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/ThemeOverlay.App.TealPrimary"
     >
 
     <!-- ─────────── Khối nhập liệu (2 dòng) ─────────── -->
@@ -35,6 +36,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilCustomerPhone"
+                    style="@style/Widget.App.TextInputLayout.Teal"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:hint="Số điện thoại">
@@ -76,6 +78,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilDateIn"
+                    style="@style/Widget.App.TextInputLayout.Teal"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:hint="Ngày nhận phòng">
@@ -92,6 +95,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilDateOut"
+                    style="@style/Widget.App.TextInputLayout.Teal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -203,6 +207,7 @@
 
         <CheckBox
             android:id="@+id/cbFilter"
+            app:buttonTint="@color/checkbox_teal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -214,6 +219,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilFilterCustomerName"
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -228,6 +234,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilFilterCustomerPhone"
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="129dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

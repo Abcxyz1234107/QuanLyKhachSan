@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:theme="@style/ThemeOverlay.App.TealPrimary"
     android:padding="16dp">
 
     <LinearLayout
@@ -30,6 +31,7 @@
 
         <!-- Tổng tiền (readonly) -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -57,6 +59,7 @@
 
         <!-- Ngày thanh toán -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -72,6 +75,7 @@
 
         <!-- Ghi chú (readonly) -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.Teal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
