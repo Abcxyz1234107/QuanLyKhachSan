@@ -97,7 +97,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         }
     }
 
-    // Khởi tạo Spinner chọn năm (10 năm gần nhất)
+    // Spinner chọn năm (10 năm gần nhất)
     private fun initYearSpinner() {
         val currentYear = LocalDate.now().year
         val years = (currentYear downTo currentYear - 9).toList()
