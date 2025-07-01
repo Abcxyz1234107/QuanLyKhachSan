@@ -94,6 +94,12 @@ class RoomViewModel @Inject constructor(
                     .firstOrNull { it.tenLoaiPhong == typeName.toString() }
                     ?: throw IllegalArgumentException("Chưa chọn loại phòng hợp lệ")
 
+                val count = datPhongDao.countByRoomId(old.maPhong)
+                if (count > 0) {
+                    _message.value = "Không thể sửa: còn $count đơn đặt phòng dùng phòng này"
+                    return@launch
+                }
+
                 val updated = old.copy(maLoaiPhong = lp.maLoaiPhong)
                 phongRepo.update(updated)
                 _message.value = "Sửa phòng thành công"

@@ -62,6 +62,13 @@ class RoomTypeViewModel @Inject constructor(
             _message.value = "Tên và giá phải hợp lệ"
             return@launch
         }
+
+        val ref = phongDao.countByLoaiPhong(target.maLoaiPhong)
+        if (ref > 0) {
+            _message.value = "Không thể sửa: còn $ref phòng thuộc loại này"
+            return@launch
+        }
+
         dao.update(target.copy(tenLoaiPhong = name.toString(), gia = price.toDouble()))
         _message.value = "Sửa thành công"
         reset()

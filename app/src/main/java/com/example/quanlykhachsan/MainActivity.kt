@@ -136,6 +136,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Ẩn thanh điều hướng
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+        controller?.isAppearanceLightNavigationBars = true // (tùy chọn: dùng theme sáng)
+        controller?.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller?.hide(WindowInsetsCompat.Type.navigationBars())
+
         // ── 1. Ẩn thanh trạng thái (toàn màn hình) ──────────────────────────────
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).apply {

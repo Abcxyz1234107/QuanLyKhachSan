@@ -57,14 +57,17 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
                 binding.edtId.text.toString(),
                 binding.actvRoomType.text
             )
+            clearInputs()
         }
         // Sửa
         binding.btnEdit.setOnClickListener {
             vm.editCurrent(binding.actvRoomType.text)
+            clearInputs()
         }
         // Xóa
         binding.btnDelete.setOnClickListener {
             confirmDelete(vm.current!!)
+            clearInputs()
         }
 
         /* ---------- ComboBox Tên loại phòng ---------- */
@@ -174,5 +177,9 @@ class RoomFragment : Fragment(R.layout.fragment_room) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun clearInputs() {
+        binding.edtId.setText("")
+        binding.actvRoomType.setText("")
     }
 }

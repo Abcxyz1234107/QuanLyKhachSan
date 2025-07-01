@@ -19,7 +19,8 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
     private var _binding: FragmentRoomTypeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RoomTypeViewModel by viewModels()
-    private fun priceInput() = binding.edtPrice.text.toString().toFloatOrNull() ?: 0f
+    private fun priceInput(): Float =
+        binding.edtPrice.text.toString().replace(",", "").toFloatOrNull() ?: 0f
     private lateinit var adapter: RoomTypeAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +35,7 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
                 viewModel.reset()
             } else {
                 binding.edtName.setText(selected.tenLoaiPhong)
-                binding.edtPrice.setText(selected.gia.toString())
+                binding.edtPrice.setText(formatPrice(selected.gia))
                 viewModel.onItemSelected(selected)
             }
         }
@@ -50,11 +51,16 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
         /* ---------- Nút ---------- */
         binding.btnAdd.setOnClickListener {
             viewModel.add(binding.edtName.text, priceInput())
+            clearInputs()
         }
         binding.btnEdit.setOnClickListener {
             viewModel.editCurrent(binding.edtName.text, priceInput())
+            clearInputs()
         }
-        binding.btnDelete.setOnClickListener { confirmDelete(viewModel.current!!) }
+        binding.btnDelete.setOnClickListener {
+            confirmDelete(viewModel.current!!)
+            clearInputs()
+        }
 
         /* ---------- Filter ---------- */
         updateFilter()
@@ -83,8 +89,8 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
     }
     private fun updateFilter() = viewModel.setFilter(
         binding.cbFilter.isChecked,
-        binding.edtMin.text.toString().toDoubleOrNull() ?: 0.0,
-        binding.edtMax.text.toString().toDoubleOrNull() ?: Double.MAX_VALUE
+        binding.edtMin.text.toString().replace(",", "").toDoubleOrNull() ?: 0.0,
+        binding.edtMax.text.toString().replace(",", "").toDoubleOrNull() ?: Double.MAX_VALUE
     )
     private fun hideKeyboard() {
         val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
@@ -95,4 +101,10 @@ class RoomTypeFragment : Fragment(R.layout.fragment_room_type) {
         _binding = null
         super.onDestroyView()
     }
+    private fun clearInputs() {
+        binding.edtName.setText("")
+        binding.edtPrice.setText("")
+    }
+    private fun formatPrice(v: Double) =
+        java.text.DecimalFormat("#,###").format(v)
 }

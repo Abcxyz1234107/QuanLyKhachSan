@@ -163,12 +163,10 @@ class BookViewModel(app: Application) : AndroidViewModel(app) {
         }
         viewModelScope.launch(Dispatchers.IO) {
             val updated = current.copy(
-                soDienThoai   = phone,
-                ngayNhanPhong = dateIn,
-                ngayTraPhong  = dateOut
+                soDienThoai   = phone
             )
             datPhongDao.update(updated)
-            _message.postValue("Đã cập nhật đơn #${current.maDatPhong}")
+            _message.postValue("Đã cập nhật đơn của sđt #${current.soDienThoai}")
         }
     }
     fun updateBookingFull(dp: DatPhong) = viewModelScope.launch(Dispatchers.IO) {

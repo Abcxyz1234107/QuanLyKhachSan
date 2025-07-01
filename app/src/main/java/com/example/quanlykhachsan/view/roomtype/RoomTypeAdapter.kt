@@ -40,8 +40,9 @@ class RoomTypeAdapter(
 
         fun bind(item: LoaiPhong, isSelected: Boolean) = with(b) {
             root.isSelected = isSelected
-            tvName.text = item.tenLoaiPhong
-            tvPrice.text = item.gia.toString()
+            tvName.text  = item.tenLoaiPhong
+            val df = java.text.DecimalFormat("#,### ₫")
+            tvPrice.text = df.format(item.gia)
         }
     }
 
