@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <!-- ▼ Spinner chọn năm (Item 1) -->
+        <!-- Spinner chọn năm  -->
         <Spinner
             style="@style/Widget_App_BorderedContainer"
             android:id="@+id/spYear"
@@ -18,6 +18,50 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Chi tiết doanh thu -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardYearDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spYear"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvTotalYear"
+                    android:textStyle="bold"
+                    android:text="Tổng doanh thu năm: ..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tvCompare"
+                    android:text="Tăng/giảm so với năm trước: ..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tvMaxType"
+                    android:text="LP doanh thu cao nhất: ..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tvMinType"
+                    android:text="LP doanh thu thấp nhất: ..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- ─────────── Guideline chia màn thành 2×2 ─────────── -->
         <androidx.constraintlayout.widget.Guideline
@@ -32,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.37" />
+            app:layout_constraintGuide_percent="0.54" />
 
         <!-- ─────────── Row 1: Quý I – Quý II ─────────── -->
         <com.github.mikephil.charting.charts.PieChart
@@ -43,7 +87,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@id/guidelineV"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spYear" />
+            app:layout_constraintTop_toBottomOf="@id/cardYearDetail" />
 
         <TextView
             android:id="@+id/tvQ1"
@@ -63,7 +107,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="@id/guidelineV"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spYear"
+            app:layout_constraintTop_toBottomOf="@id/cardYearDetail"
             app:layout_constraintBottom_toTopOf="@id/guidelineH" />
 
         <TextView

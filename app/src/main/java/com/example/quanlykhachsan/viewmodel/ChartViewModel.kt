@@ -3,6 +3,7 @@ package com.example.quanlykhachsan.viewmodel
 import androidx.lifecycle.*
 import com.example.quanlykhachsan.data.local.model.RoomTypeRevenue
 import com.example.quanlykhachsan.data.repository.chart.ChartRepository
+import com.example.quanlykhachsan.data.repository.chart.YearDetail
 import com.github.mikephil.charting.data.PieEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -60,4 +61,9 @@ class ChartViewModel @Inject constructor(
     fun setYear(year: Int) { if (year != selectedYear.value) selectedYear.value = year }
 
     fun clearSlice() = _roomTypeRevenue.postValue(emptyList())
+
+    val yearDetail: LiveData<YearDetail> =
+        selectedYear.switchMap { y ->
+            liveData(Dispatchers.IO) { emit(repo.getYearDetail(y)) }
+        }
 }

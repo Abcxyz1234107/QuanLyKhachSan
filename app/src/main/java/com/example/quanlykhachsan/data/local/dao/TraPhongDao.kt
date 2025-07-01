@@ -76,4 +76,10 @@ interface TraPhongDao {
 
     @Query("SELECT * FROM tra_phong")
     suspend fun getAllExport(): List<TraPhong>
+
+    @Query(
+        "SELECT IFNULL(SUM(tongTien),0) FROM tra_phong " +
+                "WHERE ngayThanhToan BETWEEN :startMs AND :endMs"
+    )
+    suspend fun getTotalRevenueRange(startMs: Long, endMs: Long): Double
 }

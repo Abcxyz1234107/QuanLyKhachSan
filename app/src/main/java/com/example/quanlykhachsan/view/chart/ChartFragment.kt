@@ -47,6 +47,26 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
 
         setupRecycler()
         observeRoomTypeRevenue()
+
+        viewModel.yearDetail.observe(viewLifecycleOwner) { d ->
+            val cur = vnCurrency
+            binding.tvTotalYear.text =
+                "Tổng doanh thu năm: ${cur.format(d.total)}"
+
+            val diffText = if (d.diff >= 0)
+                "Tăng ${cur.format(d.diff)} so với năm trước"
+            else
+                "Giảm ${cur.format(-d.diff)} so với năm trước"
+            binding.tvCompare.text = diffText
+
+            binding.tvMaxType.text = if (d.maxType != null)
+                "LP doanh thu cao nhất: ${d.maxType.tenLoaiPhong} – ${cur.format(d.maxType.total)}"
+            else "LP doanh thu cao nhất: …"
+
+            binding.tvMinType.text = if (d.minType != null)
+                "LP doanh thu thấp nhất: ${d.minType.tenLoaiPhong} – ${cur.format(d.minType.total)}"
+            else "LP doanh thu thấp nhất: …"
+        }
     }
 
     // -------------------- cấu hình 4 PieChart --------------------
